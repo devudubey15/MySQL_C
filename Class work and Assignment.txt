@@ -1,0 +1,1462 @@
+.The command you provided is a MySQL command-line client connection string.
+
+--------------------------------------------------------
+.mysql -uroot -pdevasheesh -P3306 -Ddacdb
+--------------------------------------------------------
+
+.mysql: This is the command to launch the MySQL command-line client.
+
+-uroot: This is an option specifying the MySQL user to connect with. In this case, it's set to "root". The -u stands for "user".
+
+-pdevasheesh: This is another option specifying the password for the MySQL user. In this case, it's set to "devasheesh". The -p stands for "password". Note that there's no space between -p and the actual password.
+
+-p3306:  -P (uppercase "P"), -P3306 specify port 3306. However, the default MySQL port is 3306, so you usually don't need to specify it explicitly.
+
+-Ddacdb: This is specifying the database to use after connecting. In this case, it's set to "dacdb". The -D stands for "database".
+
+----------------------------------------------------------
+. create database dacdb;
+  //created database
+
+---------------------------------------------------------------
+.show databases;
+  // showall the databases
+
++--------------------+
+| Database           |
++--------------------+
+| dacdb              |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+---------------------------------------------------------------
+.use dacdb;
+ // to work on dacdb database
+
+---------------------------------------------------------------
+
+.select database();
+//to show on which data base we are working
+
++------------+
+| database() |
++------------+
+| dacdb      |
++------------+
+
+---------------------------------------------------------------
+
+.show tables;
+// shows tables of current database
+Empty set (0.00 sec)
+---------------------------------------------------------
+
+.Create table t1 (c1 int , c2 varchr(100) , c3 date);
+// table creation
+
+---------------------------------------------------------------
+
+.show tables;
+
+---------------------------------------------------------------
+.desc t1;
+//complete description of table
+---------------------------------------------------------------
+
+.insert into t1 (c1 , c2 , c3 ) values (1,'abc','2023-10-12');
+//setting values into table
+
+---------------------------------------------------------------
+
+.select * from t1;
+//showing complete table 
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
++------+------+------------+
+
+
+---------------------------------------------------------------
+.insert into t1 values(2,'b', current_date());
+//inserted date using "current_date()" (old) method
+//curdate() //new method 
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
++------+------+------------+
+
+---------------------------------------------------------------
+
+.insert into t1 (c1,c2) values(3,'d');
+//inserted another row 
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
++------+------+------------+
+
+---------------------------------------------------------------
+
+// current_time()   *old method
+. select curtime();  *new method
+//shows current time
++-----------+
+| curtime() |
++-----------+
+| 09:45:46  |
++-----------+
+
+---------------------------------------------------------------
+
+.insert into t1 (c1,c2,c3) values (11,'z', curtime());
+
+//c3 is of date type that's why we are not able to set time in it.
+
+---------------------------------------------------------------
+.mysql> select * from t1;
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
+|   11 | z    | 2023-11-18 | <= here we can see it
++------+------+------------+
+
+
+---------------------------------------------------------------
+.select * from t1 where c1!= 1;
+
+// it skips all of those rows which have c1 as 1 and prints rest
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+
+---------------------------------------------------------------
+. select * from t1 where c3 <> current_date();
+
+//here <> means "not equals to "
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
++------+------+------------+
+
+
+---------------------------------------------------------------
+.select * from t1 where c3 is null;
+
++------+------+------+
+| c1   | c2   | c3   |
++------+------+------+
+|    3 | d    | NULL |
+|    3 | e    | NULL |
++------+------+------+
+
+** in  case of null we can not write "c3 = null";
+//select * from table1 where  column3 = null;
+//   ->  Empty set (0.00 sec)
+
+//select * from table1 where  column3 is null;      (it is working fine)
++---------+---------+---------+
+| column1 | column2 | column3 |
++---------+---------+---------+
+|    7890 | 34567   |    NULL |
+
+---------------------------------------------------------------
+.select * from t1 where c3 is not null;
+//prints those rows which idn't have c3 as null.
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+
+---------------------------------------------------------------
+. select * from t1 where c1 >= 1;
+//less tha equals 
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+
+---------------------------------------------------------------
+
+.select * from t1 where c1 in (2,3);
+//shows those rows which have c1 as 2 and 3
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
++------+------+------------+
+
+//done in lab
+
+select * from table1 where (column1 in (1,2,curdate()) or column1 is null) or (column2 in ('a','b') or column2 is null) or (column3 in (3,4) or column3 is null );
++----------+---------------------------------+----------+
+| column1  | column2                         | column3  |
++----------+---------------------------------+----------+
+|        1 | a                               |        3 |
+|        1 | b                               |        3 |
+|        2 | c                               |        4 |
+|        2 | c                               |        4 |
+|        2 | c                               |        4 |
+|    34567 | NULL                            |     7890 |
+|     NULL | 34567                           |     7890 |
+|     7890 | 34567                           |     NULL |
+|   185519 | NULL                            |     7890 |
+|     NULL | current date using curdate() -> | 20231118 |
+| 20231118 | klhgkuv                         |       78 |
+| 20231118 | klhgkuv                         | 20231118 |
++----------+---------------------------------+----------+
+
+---------------------------------------------------------------
+.select * from t1 where c1 not in (2,3);
+//shows those rows which doesn't have c1 as 2 and 3
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+//
+
+ select * from table1 where (column1 not in (1,2,curdate()) and column1 is not null) and (column2 not in ('a','b') and column2 is not null) and (column3 not in (3,4) and column3 is not null );
++---------+------------------------------+----------+
+| column1 | column2                      | column3  |
++---------+------------------------------+----------+
+|       3 | jghdfkfjyfdjtfiytifyvjyftkyf |       56 |
+|       4 | jk                           |        8 |
+|       6 | l                            |        9 |
+|      90 | jhg                          |       88 |
+|       3 | jghdfkfjyfdjtfiytifyvjyftkyf |       56 |
+|       4 | jk                           |        8 |
+|       6 | l                            |        9 |
+|      90 | jhg                          |       88 |
+|       7 | abc                          |   185026 |
+|      78 | hhhh                         | 20231118 |
++---------+------------------------------+----------+
+
+---------------------------------------------------------------
+. select * from t1 where c1 between 1 and 3;
+
+//we give range. when we use between.
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
++------+------+------------+
+
+
+select column1,column2,column3 from table1 where column1 between
+1 and 3 or column2 between 'a' and 'c' or column3 between 1 and curdate();
++----------+---------------------------------+----------+
+| column1  | column2                         | column3  |
++----------+---------------------------------+----------+
+|        1 | a                               |        3 |
+|        1 | b                               |        3 |
+|        2 | c                               |        4 |
+|        2 | c                               |        4 |
+|        3 | jghdfkfjyfdjtfiytifyvjyftkyf    |       56 |
+|        4 | jk                              |        8 |
+|        6 | l                               |        9 |
+|       90 | jhg                             |       88 |
+|        2 | c                               |        4 |
+|        3 | jghdfkfjyfdjtfiytifyvjyftkyf    |       56 |
+|        4 | jk                              |        8 |
+|        6 | l                               |        9 |
+|       90 | jhg                             |       88 |
+|        7 | abc                             |   185026 |
+|       78 | hhhh                            | 20231118 |
+|    34567 | NULL                            |     7890 |
+|     NULL | 34567                           |     7890 |
+|   185519 | NULL                            |     7890 |
+|     NULL | current date using curdate() -> | 20231118 |
+| 20231118 | klhgkuv                         |       78 |
+| 20231118 | klhgkuv                         | 20231118 |
++----------+---------------------------------+----------+
+
+
+---------------------------------------------------------------
+.select * from t1 where c1 not between 1 and 3;
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+---------------------------------------------------------------
+
+** we can not apply transaction in alter table.
+
+
+.start transaction;
+//transaction starts from here.
+select , update , delete , insert , merge. All comes under the 
+transaction.
+
+.update t1 set c2 = 'bac' , c3 ='2023-10-12' where c1 =2;
+//this command will udate the values of c1 and c3 , where the roow values of c2 is 2. 
+
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | bac  | 2023-10-12 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+
+// update table1 set column2 = 'yui' , column3 = '3' where column1 in (1,3);
+
+--------------------------------------------------
+.rollback;
+//works as undo
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|    3 | d    | NULL       |
+|    3 | e    | NULL       |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+--------------------------------------------------
+.delete from t1 where c3 is null;
+//delete all rows where c3 is null
++------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+ delete from table1 where column2 is null or column3 is null;
+Query OK, 3 rows affected (0.02 sec)
+
+mysql> select * from table1;
++----------+---------+----------+
+| column1  | column2 | column3  |
++----------+---------+----------+
+|        1 | yui     |        3 |
+|        1 | yui     |        3 |
+|        2 | c       |        4 |
+|        2 | c       |        4 |
+|        3 | yui     |        3 |
+|        4 | jk      |        8 |
+|        6 | l       |        9 |
+|       90 | jhg     |       88 |
+|        2 | c       |        4 |
+|        3 | yui     |        3 |
+|        4 | jk      |        8 |
+|        6 | l       |        9 |
+|       90 | jhg     |       88 |
+|        7 | abc     |   185026 |
+|       78 | hhhh    | 20231118 |
+| 20231118 | klhgkuv |       78 |
+| 20231118 | klhgkuv | 20231118 |
++----------+---------+----------+
+
+--------------------------------------------------
+.alter table t1 drop column c4;
+//used for delete a column
+ +------+------+------------+
+| c1   | c2   | c3         |
++------+------+------------+
+|    1 | abc  | 2023-10-12 |
+|    2 | b    | 2023-11-18 |
+|   11 | z    | 2023-11-18 |
++------+------+------------+
+
+--------------------------------------------------
+
+.Alter table t1 add c4 int ;
+//used for adding adding a table
+ +------+------+------------+------+
+| c1   | c2   | c3         | c4   |
++------+------+------------+------+
+|    1 | abc  | 2023-10-12 | NULL |
+|    2 | b    | 2023-11-18 | NULL |
+|   11 | z    | 2023-11-18 | NULL |
++------+------+------------+------+
+--------------------------------------------------
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| c1    | int          | YES  |     | NULL    |       |
+| c2    | varchar(100) | YES  |     | NULL    |       |
+| c3    | date         | YES  |     | NULL    |       |
+| c4    | int          | YES  |     | NULL    |       |
+| c5    | int          | NO   |     | 100     |       |
++-------+--------------+------+-----+---------+-------+
+
+.alter table t1 modify column c5 varchar(100) default 'abc' not null;
+//******** so i think modify is used to change the datatype of the column. (look in to it one more time)
+
+desc t1;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| c1    | int          | YES  |     | NULL    |       |
+| c2    | varchar(100) | YES  |     | NULL    |       |
+| c3    | date         | YES  |     | NULL    |       |
+| c4    | int          | YES  |     | NULL    |       |
+| c5    | varchar(100) | NO   |     | abc     |       |
++-------+--------------+------+-----+---------+-------+
+
+.Alter table t1 rename to t1;
+// here we are changinng the name of the table
+
+
+
+
+
+==============================================================================================================================
+.integrity constraints
+
+. create table t1_uk(c1 int unique, c2  varchar(100) );
+//here we are creating a table with a column having all unique values.
++------+------+
+| c1   | c2   |
++------+------+
+|    1 | a    |
++------+------+
+//all c1 values will be unique
+
+--------------------------------------------------------------
+.Create table t1_uk_comp(c1 int, c2 int, c3 varchar(100), unique(c1,c2));
+// here weare creating another table with multiple unique keys 
+// inthis case they are (c1,c2).
+//c1 is unique and c2 is also unique sepratly. 
+
+desc t1_uk_comp;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| c1    | int          | YES  | MUL | NULL    |       |
+| c2    | int          | YES  |     | NULL    |       |
+| c3    | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+ 
+
+-------------------------------------------------------------
+
+Insert into t1_pk_comp values(1,1,'a');
+
+Insert into t1_pk_comp values(1,2,'b');
+
+//here i inserted to rows in t1_pk_comp
+
+-------------------------------------------------------------
+
+
+Insert into t1_pk_comp values(2,2,'c'); //will give an error
+// this will because c2 is unique (can not have duplicate)
+//so it will give error 
+//ERROR 1062 (23000): Duplicate entry '2-2' for key 't1_uk_comp.c1'
+
+-------------------------------------------------------------
+
+
+Create table t_cc (eid int,ename varchar(100), salary int check(salary>1000));
+//table wil be created , but here we are using check method , which is used when we insert the the value in c3 column (salary) if salary is less than 1000 it will give an error.
+
+ . Insert into t_cc values(1,'a',100);
+//ERROR 3819 (HY000): Check constraint 't_cc_chk_1' is violated.
+
+-------------------------------------------------------------
+
+. Insert into t_cc values(1,'a',1100);
+.select * from t_cc;
++------+-------+--------+
+| eid  | ename | salary |
++------+-------+--------+
+|    1 | a     |   1100 |
++------+-------+--------+
+
+-------------------------------------------------------------
+Insert into t_cc values(1,'a',null);
+//somehow null is iserting (look into it)
+
+mysql> select * from t_cc;
++------+-------+--------+
+| eid  | ename | salary |
++------+-------+--------+
+|    1 | a     |   1100 |
+|    1 | a     |   NULL |
++------+-------+--------+
+
+-------------------------------------------------------------
+
+.Create table t_cc2 
+(eid int, ename varchar(100), gender varchar(10) check(gender in ('Male','Female')));
+
+//here we created another table t_cc2 which will accept only two values in gender column (male, female) other than that  it will give error.
+-------------------------------------------------------------
+
+.Insert into t_cc2 value(1,'a','test');
+//ERROR 3819 (HY000): Check constraint 't_cc2_chk_1' is violated.
+-------------------------------------------------------------
+Insert into t_cc2 value(1,'a','male');
+. select * from t_cc2;
++------+-------+--------+
+| eid  | ename | gender |
++------+-------+--------+
+|    1 | a     | male   |
++------+-------+--------+
+
+-------------------------------------------------------------
+
+.Create table t_nn (id int, name varchar(100) not null);
+//here we create a table in name column it will not accept null
+
+--------------------------------------------------------------
+. Insert into t_nn values(1,null);
+//ERROR 1048 (23000): Column 'name' cannot be null
+
+--------------------------------------------------------------
+==========================================================================
+
+. Create table t_parent(deptid int primary key , deptname varchar(100));
+//here we are creating a table with a primary key (deotid) 
+
+.Create table t_child(eid int, ename varchar(10),Deptid int,Foreign key fk1 (deptid) references t_parent(deptid));
+
+//here we are creating another table with columns eid,ename, Deptid,
+//inthe Deptid we are using, primary key (deptid) of T_parent table. 
+ 
+----------------------------------------------------------------------------
+Insert into t_child values(1,'a',1);
+//it will give error because untill now , t_parent table's column deptid doesn't contain any value. 
+
+----------------------------------------------------------------------------
+
+.Insert into t_child values(1,'a',null);
+//it will work because forign key can take 'null'.
+
+----------------------------------------------------------------------------
+.Insert into t_parent values(1,'HR');
+//now we are inserting values in t_parent table
+
+.Insert into t_child values(1,'a',1);
+//now it will work
+
+. select * from t_child;
++------+-------+--------+
+| eid  | ename | Deptid |
++------+-------+--------+
+|    1 | a     |   NULL |
+|    1 | a     |      1 |
++------+-------+--------+
+----------------------------------------------------------------------------
+============================================================================
+
+.Atomocity
+.consistancy
+.isolation
+.
+
+
+AGGRIGATE FUNCTIONS 
+-------------------------------------------------
+		COUNT
+
+.count of hard coded value is equivalant of count of *
+.count(*) -> counts of records.
+.count(col_nam)-> count of all non-null values.
+.count(distinct col_name) -> will give all distinct values in specified col.
+
+//Table t1
++------+------+------------+------+-----+
+| c1   | c2   | c3         | c4   | c5  |
++------+------+------------+------+-----+
+|    1 | abc  | 2023-10-12 | NULL | 100 |
+|    2 | b    | 2023-11-18 | NULL | 100 |
+|   11 | z    | 2023-11-18 | NULL | 100 |
++------+------+------------+------+-----+
+
+Select count(*) from t1;
+
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+
+.Select count(1) from t1;
++----------+
+| count(1) |
++----------+
+|        3 |
++----------+
+
+.Select count(c1) from t1;
++-----------+
+| count(c1) |
++-----------+
+|         3 |
++-----------+
+
+
+.Select count('adsds') from t1;
++----------------+
+| count('adsds') |
++----------------+
+|              3 |
++----------------+
+
+
+
+--------------------------------------
+		SUM
+
++------+------+------------+------+-----+
+| c1   | c2   | c3         | c4   | c5  |
++------+------+------------+------+-----+
+|    1 | abc  | 2023-10-12 | NULL | 100 |
+|    2 | b    | 2023-11-18 | NULL | 100 |
+|   11 | z    | 2023-11-18 | NULL | 100 |
++------+------+------------+------+-----+
+
+.it will work on only  those columns which are honlding integer values. 
+
+
+. Select sum(c1) from t1;
++---------+
+| sum(c1) |
++---------+
+|      14 |
++---------+
+
+.Select sum(c2) from t1;
++---------+
+| sum(c2) |
++---------+
+|       0 |
++---------+
+
+.Select sum(c3) from t1;
++----------+
+| sum(c3)  |
++----------+
+| 60693248 |
++----------+
+
+.Select sum(c5) from t1;
++---------+
+| sum(c5) |
++---------+
+|     300 |
++---------+
+============================================================================
+
+				AVG
+//it will give average
+
+.Select avg(c1) from t1;
++---------+
+| avg(c1) |
++---------+
+|  4.6667 |
++---------+
+
+. Select avg(c5) from t1;
++---------+
+| avg(c5) |
++---------+
+|     100 |
++---------+
+
+
+============================================================================
+============================================================================
+					JOINS
+.cross join
+
+.Select * from t1,t2;
+//it is an old syntax and show the cross join
+
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
+|    2 | b    |    3 | x    |
+|    1 | a    |    3 | x    |
+|    3 | c    |    4 | y    |
+|    2 | b    |    4 | y    |
+|    1 | a    |    4 | y    |
+|    3 | c    |    5 | z    |
+|    2 | b    |    5 | z    |
+|    1 | a    |    5 | z    |
++------+------+------+------+
+
+. Select * from t1 cross join t2;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
+|    2 | b    |    3 | x    |
+|    1 | a    |    3 | x    |
+|    3 | c    |    4 | y    |
+|    2 | b    |    4 | y    |
+|    1 | a    |    4 | y    |
+|    3 | c    |    5 | z    |
+|    2 | b    |    5 | z    |
+|    1 | a    |    5 | z    |
++------+------+------+------+
+
+// this is compartively newr syntax 
+
+. Select c1,c2,c3 from t1 cross join t2;
+//ERROR 1052 (23000): Column 'c1' in field list is ambiguous
+//because it doesn't know which c1 need to be called because t1 and t2 both get c1 column.
+
+. Select t1.*,c3 from t1 cross join t2;
++------+------+------+
+| c1   | c2   | c3   |
++------+------+------+
+|    3 | c    | x    |
+|    2 | b    | x    |
+|    1 | a    | x    |
+|    3 | c    | y    |
+|    2 | b    | y    |
+|    1 | a    | y    |
+|    3 | c    | z    |
+|    2 | b    | z    |
+|    1 | a    | z    |
++------+------+------+
+
+//so we have to specify, which tablescoulumn we want 
+
+.Select * from t1,t2;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
+|    2 | b    |    3 | x    |
+|    1 | a    |    3 | x    |
+|    3 | c    |    4 | y    |
+|    2 | b    |    4 | y    |
+|    1 | a    |    4 | y    |
+|    3 | c    |    5 | z    |
+|    2 | b    |    5 | z    |
+|    1 | a    |    5 | z    |
++------+------+------+------+
+======================================================================
+
+				EQUI JOIN
+----------------------------------------------------------------------
+
+				inner join
+.it will check a condition
+. it will always give common values 
+
+
+.old syntax
+.Select * from t1,t2 where t1.c1=t2.c1;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
++------+------+------+------+
+
+– New Syntax Ansi Syntax
+
+.Select * from t1 inner join t2 
+On t1.c1=t2.c1;
+
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
++------+------+------+------+
+
+.Select * from t1  join t2 
+On t1.c1=t2.c1;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
++------+------+------+------+
+
+. Select c1,c2,c3 from t1  inner join t2 On t1.c1=t2.c1;
+ERROR 1052 (23000): Column 'c1' in field list is ambiguous
+
+.Select t1.c1,c2,c3 from t1 inner join t2 
+On t1.c1=t2.c1;
++------+------+------+
+| c1   | c2   | c3   |
++------+------+------+
+|    3 | c    | x    |
++------+------+------+
+
+
+.select t1.*,c3 from t1 inner join t2 on t1.c1=t2.c1;
++------+------+------+
+| c1   | c2   | c3   |
++------+------+------+
+|    3 | c    | x    |
++------+------+------+
+
+======================================================================
+				left outer join
+.work on equality condition
+.all the rows from left table and matching table from from right table
+
+– New Syntax Ansi Syntax
+
+.Select * from t1 left outer join t2 
+On t1.c1=t2.c1;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    1 | a    | NULL | NULL |
+|    2 | b    | NULL | NULL |
+|    3 | c    |    3 | x    |
++------+------+------+------+
+
+
+.Select * from t1 left join t2 
+On t1.c1=t2.c1;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    1 | a    | NULL | NULL |
+|    2 | b    | NULL | NULL |
+|    3 | c    |    3 | x    |
++------+------+------+------+
+
+
+======================================================================
+                          right outer join
+
+.all the rows from right table and matching table from from left table
+
+– New Syntax Ansi Syntax
+.Select * from t1 right outer join t2 
+On t1.c1=t2.c1;
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
+| NULL | NULL |    4 | y    |
+| NULL | NULL |    5 | z    |
++------+------+------+------+
+
+.Select * from t1  right join t2 
+On t1.c1=t2.c1;
+
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    3 | c    |    3 | x    |
+| NULL | NULL |    4 | y    |
+| NULL | NULL |    5 | z    |
++------+------+------+------+
+
+==============================================================================
+==============================================================================
+				
+***** FULLJOIN isn't supported in mysql.
+
+.to perform fulljoin -> we have to union left outer join and right outer join.
+
+Select * from t1 left outer join t2 
+On t1.c1=t2.c1
+union
+Select * from t1 right outer join t2 
+On t1.c1=t2.c1;
+
++------+------+------+------+
+| c1   | c2   | c1   | c3   |
++------+------+------+------+
+|    1 | a    | NULL | NULL |
+|    2 | b    | NULL | NULL |
+|    3 | c    |    3 | x    |
+| NULL | NULL |    4 | y    |
+| NULL | NULL |    5 | z    |
++------+------+------+------+
+
+
+------------------------------------------------------------------------
+				SET 
+****difference between cross join and Union
+-> cross join combines data into new columns.
+-> union combines the result set of two or more SELECT statements.
+
+
+Create table a (id int);
+Create table b (id int);
+
+
+Insert into a values(1),(2),(3);
+Insert into b values(3),(4),(5);
+
+.Select * from a 
+Union
+Select * from b;
+
++------+
+| id   |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+
+.Select * from b
+Union
+Select * from a;
+
+
++------+
+| id   |
++------+
+|    3 |
+|    4 |
+|    5 |
+|    1 |
+|    2 |
++------+
+
+.Select * from a 
+Union all
+Select * from b;
+
++------+
+| id   |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    3 |
+|    4 |
+|    5 |
++------+
+
+.Select * from b
+Union all
+Select * from a;
+
++------+
+| id   |
++------+
+|    3 |
+|    4 |
+|    5 |
+|    1 |
+|    2 |
+|    3 |
++------+
+
+.Select * from a 
+intersect
+Select * from b;
+
++------+
+| id   |
++------+
+|    3 |
++------+
+
+.Select * from a 
+except
+Select * from b;
+
++------+
+| id   |
++------+
+|    1 |
+|    2 |
++------+
+
+.select * from b except select * from a;
++------+
+| id   |
++------+
+|    4 |
+|    5 |
++------+
+
+================================================================================
+				   SubQuerry
+
+select * from a;
++------+
+| id   |
++------+
+|    1 |
+|    2 |
+|    3 |
++------+
+
+.select * from b;
++------+
+| id   |
++------+
+|    3 |
+|    4 |
+|    5 |
++------+
+
+
+. Select * from a where id in (select id from b);
++------+
+| id   |
++------+
+|    3 |
++------+
+//another way for finding intersect
+.
+
+----------------------------------------------------------------------------
+
+=========================================================================
+				group by clause
+This SQL query retrieves data from two tables, "emp" and "dept," and performs operations to find the total salary for each department where the total salary is greater than 50,000. Let's break down the query:
+
+SELECT deptname, SUM(salary) AS total_salary
+FROM emp e
+JOIN dept d ON e.deptid = d.deptid
+GROUP BY deptname
+HAVING SUM(salary) > 50000;
+
+.SELECT deptname, SUM(salary) AS total_salary: This part selects the "deptname" column from the "dept" table and calculates the sum of the "salary" column from the "emp" table for each department. The result is aliased as "total_salary."
+
+.FROM emp e JOIN dept d ON e.deptid = d.deptid: This part specifies that data should be retrieved from the "emp" table (aliased as "e") and the "dept" table (aliased as "d"). It performs a join operation based on the common "deptid" column in both tables.
+
+.GROUP BY deptname: This clause groups the result set by the "deptname" column. It means that the sum of salaries will be calculated for each unique department.
+
+.HAVING SUM(salary) > 50000: This is a filtering condition applied after the grouping. It selects only those groups (departments) where the sum of salaries is greater than 50,000.
+
+So, the final result will be a list of department names and their corresponding total salaries, but only for departments where the total salary is greater than 50,000.
+
+**having clause is only used with group by cluase.
+
+===========================================================================
+				order by
+
+*groupby ->
+*orderby -> ascening by default and we have to give desc explicitly
+*having ->oly used with group by clause
+*limit -> it will print given limit 
+ 
+*offset -> it will skip , those rows.
+
+.
+mysql> create table dept ( deptid int primary key , deptname varchar(10));
+//table ceated called dept
+.create table emp ( eid int  , ename varchar(20) , salary int , deptid int references dept(deptid));
+//table created called emp
+
+
+//Inserting into both tables
+
+
+  insert into dept values (1 , 'HR');
+  insert into dept values (2, 'IT');
+  insert into dept values (3, 'Finance'); 
+  insert into dept values(4,'OPR');
+
+   insert into emp values (1,'a',1000,1);
+   insert into emp values (2,'b' , 1023 , 2);
+   insert into emp values (3,'c' , 23 , 3);
+   insert into emp values (4,'d' , 123 , 3);
+   insert into emp values (5,'e' , 102 , 1);
+   insert into emp values (6,'f' , 2023 , 3);
+   insert into emp values (7,'g' , 323 , 1);
+   insert into emp values (8,'h' , 523 , 2);
+   insert into emp values (9,'i' , 136 , 1);
+   insert into emp values (10,'j', 627 , 1);
+   insert into emp values (11,'k' , 978 , 3);
+   insert into emp values (12,'l' , 222 , 1);
+   insert into emp values (13,'m' , 746 , 1);
+   insert into emp values (14,'n' , 3223 , 1);
+   insert into emp values (15,'o' , 1999 , 3);
+   insert into emp values (16,'p' , 821 , 3);
+   insert into emp values (17,'q' , 324 , 1);
+   insert into emp values (18,'r' , 546 , 3);
+   insert into emp values (19,'s' , 717 , 2);
+   insert into emp values (20,'t' , 817 , 2);
+   insert into emp values (21,'u' , 888 , 3);
+   insert into emp values (22,'v' , 9029 , 1);
+   insert into emp values (23,'w' , 20001 , 3);
+   insert into emp values (24,'x' , 28222 , 1);
+   insert into emp values (25,'y' , 19212 , 3);
+   insert into emp values (26,'z' , 12111 , 1);
+   insert into emp values (27,'a1' , 3211 , 1);
+   insert into emp values (28,'a2' , 9238 , 1);
+   insert into emp values (29,'a3' , 653 , 3);
+   insert into emp values (30,'a4' , 44 , 1);
+   insert into emp values (31,'a5' , 3 , 2);
+   insert into emp values (32,'a6' , 16 , 1);
+   insert into emp values (33,'a7' , 14 , 2);
+   insert into emp values (34,'a8' , 845 , 1);
+   insert into emp values (35,'a9' , 135 , 3);
+   insert into emp values (36,'b1' , 1212 , 1);
+   insert into emp values (37,'b2' , 1242 , 2);
+   insert into emp values (38,'b3' , 4212 , 2);
+   insert into emp values (39,'b4' , 4444 , 3);
+   insert into emp values (40,'b5' , 555 , 1);
+   insert into emp values (41,'b6' , 1553 , 3);
+   insert into emp values (42,'b7' , 6432 , 1);
+   insert into emp values (43,'b8' , 4532 , 2);
+   insert into emp values (44,'b9' , 3355 , 1);
+   insert into emp values (45,'c1' , 2324 , 2);
+
+
+
+.Select sum(salary) from emp;
++-------------+
+| sum(salary) |
++-------------+
+|      149779 |
++-------------+
+
+. Select ename,deptname,salary From emp join dept On emp.deptid=dept.deptid;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a     | HR       |   1000 |
+| b     | IT       |   1023 |
+| c     | Finance  |     23 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| f     | Finance  |   2023 |
+| g     | HR       |    323 |
+| h     | IT       |    523 |
+| i     | HR       |    136 |
+| j     | HR       |    627 |
+| k     | Finance  |    978 |
+| l     | HR       |    222 |
+| m     | HR       |    746 |
+| n     | HR       |   3223 |
+| o     | Finance  |   1999 |
+| p     | Finance  |    821 |
+| q     | HR       |    324 |
+| r     | Finance  |    546 |
+| s     | IT       |    717 |
+| t     | IT       |    817 |
+| u     | Finance  |    888 |
+| v     | HR       |   9029 |
+| w     | Finance  |  20001 |
+| x     | HR       |  28222 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| a1    | HR       |   3211 |
+| a2    | HR       |   9238 |
+| a3    | Finance  |    653 |
+| a4    | HR       |     44 |
+| a5    | IT       |      3 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a8    | HR       |    845 |
+| a9    | Finance  |    135 |
+| b1    | HR       |   1212 |
+| b2    | IT       |   1242 |
+| b3    | IT       |   4212 |
+| b4    | Finance  |   4444 |
+| b5    | HR       |    555 |
+| b6    | Finance  |   1553 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b9    | HR       |   3355 |
+| c1    | IT       |   2324 |
++-------+----------+--------+
+
+. Select deptname,sum(salary) total_salary From emp join dept On emp.deptid=dept.deptid Group by deptname;
+
++----------+--------------+
+| deptname | total_salary |
++----------+--------------+
+| HR       |        80973 |
+| IT       |        15407 |
+| Finance  |        53399 |
++----------+--------------+
+
+.Select deptname,sum(salary) total_salary From emp e join dept d On e.deptid=d.deptid Group by deptname Having sum(salary)>50000;
+
+
++----------+--------------+
+| deptname | total_salary |
++----------+--------------+
+| HR       |        80973 |
+| Finance  |        53399 |
++----------+--------------+
+
+.Select ename,deptname,salary From emp join dept On emp.deptid=dept.deptid Order by deptname,salary desc;
+
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| w     | Finance  |  20001 |
+| y     | Finance  |  19212 |
+| b4    | Finance  |   4444 |
+| f     | Finance  |   2023 |
+| o     | Finance  |   1999 |
+| b6    | Finance  |   1553 |
+| k     | Finance  |    978 |
+| u     | Finance  |    888 |
+| p     | Finance  |    821 |
+| a3    | Finance  |    653 |
+| r     | Finance  |    546 |
+| a9    | Finance  |    135 |
+| d     | Finance  |    123 |
+| c     | Finance  |     23 |
+| x     | HR       |  28222 |
+| z     | HR       |  12111 |
+| a2    | HR       |   9238 |
+| v     | HR       |   9029 |
+| b7    | HR       |   6432 |
+| b9    | HR       |   3355 |
+| n     | HR       |   3223 |
+| a1    | HR       |   3211 |
+| b1    | HR       |   1212 |
+| a     | HR       |   1000 |
+| a8    | HR       |    845 |
+| m     | HR       |    746 |
+| j     | HR       |    627 |
+| b5    | HR       |    555 |
+| q     | HR       |    324 |
+| g     | HR       |    323 |
+| l     | HR       |    222 |
+| i     | HR       |    136 |
+| e     | HR       |    102 |
+| a4    | HR       |     44 |
+| a6    | HR       |     16 |
+| b8    | IT       |   4532 |
+| b3    | IT       |   4212 |
+| c1    | IT       |   2324 |
+| b2    | IT       |   1242 |
+| b     | IT       |   1023 |
+| t     | IT       |    817 |
+| s     | IT       |    717 |
+| h     | IT       |    523 |
+| a7    | IT       |     14 |
+| a5    | IT       |      3 |
++-------+----------+--------+
+
+.Select ename,deptname,salary From emp join dept On emp.deptid=dept.deptid Order by salary desc;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
+| w     | Finance  |  20001 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| a2    | HR       |   9238 |
+| v     | HR       |   9029 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b4    | Finance  |   4444 |
+| b3    | IT       |   4212 |
+| b9    | HR       |   3355 |
+| n     | HR       |   3223 |
+| a1    | HR       |   3211 |
+| c1    | IT       |   2324 |
+| f     | Finance  |   2023 |
+| o     | Finance  |   1999 |
+| b6    | Finance  |   1553 |
+| b2    | IT       |   1242 |
+| b1    | HR       |   1212 |
+| b     | IT       |   1023 |
+| a     | HR       |   1000 |
+| k     | Finance  |    978 |
+| u     | Finance  |    888 |
+| a8    | HR       |    845 |
+| p     | Finance  |    821 |
+| t     | IT       |    817 |
+| m     | HR       |    746 |
+| s     | IT       |    717 |
+| a3    | Finance  |    653 |
+| j     | HR       |    627 |
+| b5    | HR       |    555 |
+| r     | Finance  |    546 |
+| h     | IT       |    523 |
+| q     | HR       |    324 |
+| g     | HR       |    323 |
+| l     | HR       |    222 |
+| i     | HR       |    136 |
+| a9    | Finance  |    135 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| a4    | HR       |     44 |
+| c     | Finance  |     23 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a5    | IT       |      3 |
++-------+----------+--------+
+
+.Select ename,deptname,salary From emp join dept On emp.deptid=dept.deptid Order by salary desc limit 1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
++-------+----------+--------+
+
+.Select ename,deptname,salary From emp join dept On emp.deptid=dept.deptid Order by salary desc limit 5;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
+| w     | Finance  |  20001 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| a2    | HR       |   9238 |
++-------+----------+--------+
+
+. Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 1,1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| w     | Finance  |  20001 |
++-------+----------+--------+
+
+. Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 2,1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| y     | Finance  |  19212 |
++-------+----------+--------+
+
+.mysql> Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 2;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
+| w     | Finance  |  20001 |
++-------+----------+--------+
+
+.Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary  limit 2;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a5    | IT       |      3 |
+| a7    | IT       |     14 |
++-------+----------+--------+
+------------------------------------------------------------------------------
+
+
+Create table emp_mgr (eid int, ename varchar(10), mgrid int);
+
+insert into emp_mgr values(1,'a',4);
+insert into emp_mgr values(2,'b',4);
+insert into emp_mgr values(3,'c',4);
+insert into emp_mgr values(4,'d',4);
+insert into emp_mgr values(5,'e',6);
+insert into emp_mgr values(6,'f',6);
+insert into emp_mgr values(7,'g',6);
+
+*Self Join
+
+Select e.mgrid,m.ename mgrname,e.eid,e.ename from emp_mgr e ,emp_mgr m
+Where 
+e.mgrid=m.eid and
+e.mgrid<>e.eid;
+
+(do it one more time)
+
+.Here we are creating the two copies of the table (conceptually) and comparing the mgrid and eid.
+
+
+
+
+Having clause can only be used if you have group by clause
+
+Having Clause is used to apply filter on aggregate columns
+Select deptname, sum(salary) from emp join dept on emp.deptid=dept.deptid
+  group by deptname having sum(salary)>50000;
+
+# Where vs Having
+.Where clause is used to apply filters on non-aggregate columns (table columns) and 
+.Having is used to apply filters on aggregate columns(sum,max,min avg etc.)
+
+.Where clause can be used without group by clause but having clause can be used only with group by clause.
+
+.'On' Clause is used to specify the joining condition when you use inner or outer join in the ansi syntax of joins
+
+---------------------------------------------------------------------------------
+# we can not perform single operation on multiple columns and tables #simultaniously
+for ex:-
+ SELECT * from table1 where (column1,column2,column3) is not null;
+ ERROR 1241 (21000): Operand should contain 1 column(s)
+
+he syntax you provided is not correct for checking multiple columns for NULL. You need to check each column individually. If you want to retrieve rows where any of these columns is not null.
+
+SELECT *
+FROM table1
+WHERE column1 IS NOT NULL OR column2 IS NOT NULL OR column3 IS NOT NULL;
+
+
+***related to eighth question
+//LIMIT clause is not allowed directly after each ORDER BY within a UNION. To //achieve the same result, you can use a subquery. and also after each sub query //we have to use alias.
+
+-------------------------------------------------------------------------------
+
+Assignment
+
+Revise slides atleast three times. Each revision should not take more than 30 mins
+One at the start
+Another one at the end
+ In the morning before the session starts
+2. Redo all the queries we did in the class - 2 hours
+3. Try to do the 10 query assignment which uses emp and dept. Refer to the attachment- 1 hour
+4. Read Codd Rules- 30 mins
+5. Read upto 3NF with examples - 30 mins
+
+Read About JOINs
