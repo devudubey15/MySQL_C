@@ -1,0 +1,1698 @@
+Microsoft Windows [Version 10.0.22621.2715]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Satyakam>mysql -uroot -pdevasheesh -P3306 -Ddacdb
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.34 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select ename,deptname from emp join dept on dept.deptid=emp.deptid where deptid = 1;
+ERROR 1052 (23000): Column 'deptid' in where clause is ambiguous
+mysql> select ename,deptname from emp join dept on dept.deptid=emp.deptid where dept.deptid = 1;
++-------+----------+
+| ename | deptname |
++-------+----------+
+| a     | HR       |
+| e     | HR       |
+| g     | HR       |
+| i     | HR       |
+| j     | HR       |
+| l     | HR       |
+| m     | HR       |
+| n     | HR       |
+| q     | HR       |
+| v     | HR       |
+| x     | HR       |
+| z     | HR       |
+| a1    | HR       |
+| a2    | HR       |
+| a4    | HR       |
+| a6    | HR       |
+| a8    | HR       |
+| b1    | HR       |
+| b5    | HR       |
+| b7    | HR       |
+| b9    | HR       |
++-------+----------+
+21 rows in set (0.01 sec)
+
+mysql> Create table emp_rank
+    -> (eid int, ename varchar(10), salary int, deptid int);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> insert into emp_rank values(1,'a',100,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into emp_rank values(2,'b',200,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp_rank values(3,'c',100,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp_rank values(4,'d',200,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp_rank values(5,'e',50,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp_rank values(6,'f',60,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp_rank values(7,'g',70,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql>
+mysql> Select eid,ename,salary,deptid,
+    -> row_number() over(order by salary desc) rn,
+    -> rank() over(order by salary desc) rnk,
+    -> dense_rank() over(order by salary desc) drnk
+    -> From emp_rank;
++------+-------+--------+--------+----+-----+------+
+| eid  | ename | salary | deptid | rn | rnk | drnk |
++------+-------+--------+--------+----+-----+------+
+|    2 | b     |    200 |      2 |  1 |   1 |    1 |
+|    4 | d     |    200 |      2 |  2 |   1 |    1 |
+|    1 | a     |    100 |      1 |  3 |   3 |    2 |
+|    3 | c     |    100 |      1 |  4 |   3 |    2 |
+|    7 | g     |     70 |      1 |  5 |   5 |    3 |
+|    6 | f     |     60 |      2 |  6 |   6 |    4 |
+|    5 | e     |     50 |      1 |  7 |   7 |    5 |
++------+-------+--------+--------+----+-----+------+
+7 rows in set (0.01 sec)
+
+mysql> Select eid,ename,salary,deptid,
+    -> row_number() over(partition by deptid order by salary desc) rn,
+    -> rank() over(partition by deptid order by salary desc) rnk,
+    -> dense_rank() over(partition by deptid order by salary desc) drnk
+    -> From emp_rank;
++------+-------+--------+--------+----+-----+------+
+| eid  | ename | salary | deptid | rn | rnk | drnk |
++------+-------+--------+--------+----+-----+------+
+|    1 | a     |    100 |      1 |  1 |   1 |    1 |
+|    3 | c     |    100 |      1 |  2 |   1 |    1 |
+|    7 | g     |     70 |      1 |  3 |   3 |    2 |
+|    5 | e     |     50 |      1 |  4 |   4 |    3 |
+|    2 | b     |    200 |      2 |  1 |   1 |    1 |
+|    4 | d     |    200 |      2 |  2 |   1 |    1 |
+|    6 | f     |     60 |      2 |  3 |   3 |    2 |
++------+-------+--------+--------+----+-----+------+
+7 rows in set (0.00 sec)
+
+mysql> Select * from (
+    -> Select ename,deptname,salary,dense_rank() over(order by salary desc) rn
+    -> From emp e join dept d
+    -> On e.deptid=d.deptid) as t
+    -> Where rn<=5;
++-------+----------+--------+----+
+| ename | deptname | salary | rn |
++-------+----------+--------+----+
+| x     | HR       |  28222 |  1 |
+| w     | Finance  |  20001 |  2 |
+| y     | Finance  |  19212 |  3 |
+| z     | HR       |  12111 |  4 |
+| a2    | HR       |   9238 |  5 |
++-------+----------+--------+----+
+5 rows in set (0.01 sec)
+
+mysql> Select * from (
+    -> Select ename,deptname,salary,dense_rank() over(partition by deptname order by salary desc) rn
+    -> From emp e join dept d
+    -> On e.deptid=d.deptid) as t
+    -> Where rn<=5;
++-------+----------+--------+----+
+| ename | deptname | salary | rn |
++-------+----------+--------+----+
+| w     | Finance  |  20001 |  1 |
+| y     | Finance  |  19212 |  2 |
+| b4    | Finance  |   4444 |  3 |
+| f     | Finance  |   2023 |  4 |
+| o     | Finance  |   1999 |  5 |
+| x     | HR       |  28222 |  1 |
+| z     | HR       |  12111 |  2 |
+| a2    | HR       |   9238 |  3 |
+| v     | HR       |   9029 |  4 |
+| b7    | HR       |   6432 |  5 |
+| b8    | IT       |   4532 |  1 |
+| b3    | IT       |   4212 |  2 |
+| c1    | IT       |   2324 |  3 |
+| b2    | IT       |   1242 |  4 |
+| b     | IT       |   1023 |  5 |
++-------+----------+--------+----+
+15 rows in set (0.00 sec)
+
+mysql> Select ename,salary,
+    -> Case
+    -> When salary>=1500 then 'Very High'
+    -> When salary>=1000 then 'High'
+    -> When salary>=500 then 'Avg'
+    -> Else 'Low' end Salary_Band
+    -> From emp;
++-------+--------+-------------+
+| ename | salary | Salary_Band |
++-------+--------+-------------+
+| a     |   1000 | High        |
+| b     |   1023 | High        |
+| c     |     23 | Low         |
+| d     |    123 | Low         |
+| e     |    102 | Low         |
+| f     |   2023 | Very High   |
+| g     |    323 | Low         |
+| h     |    523 | Avg         |
+| i     |    136 | Low         |
+| j     |    627 | Avg         |
+| k     |    978 | Avg         |
+| l     |    222 | Low         |
+| m     |    746 | Avg         |
+| n     |   3223 | Very High   |
+| o     |   1999 | Very High   |
+| p     |    821 | Avg         |
+| q     |    324 | Low         |
+| r     |    546 | Avg         |
+| s     |    717 | Avg         |
+| t     |    817 | Avg         |
+| u     |    888 | Avg         |
+| v     |   9029 | Very High   |
+| w     |  20001 | Very High   |
+| x     |  28222 | Very High   |
+| y     |  19212 | Very High   |
+| z     |  12111 | Very High   |
+| a1    |   3211 | Very High   |
+| a2    |   9238 | Very High   |
+| a3    |    653 | Avg         |
+| a4    |     44 | Low         |
+| a5    |      3 | Low         |
+| a6    |     16 | Low         |
+| a7    |     14 | Low         |
+| a8    |    845 | Avg         |
+| a9    |    135 | Low         |
+| b1    |   1212 | High        |
+| b2    |   1242 | High        |
+| b3    |   4212 | Very High   |
+| b4    |   4444 | Very High   |
+| b5    |    555 | Avg         |
+| b6    |   1553 | Very High   |
+| b7    |   6432 | Very High   |
+| b8    |   4532 | Very High   |
+| b9    |   3355 | Very High   |
+| c1    |   2324 | Very High   |
++-------+--------+-------------+
+45 rows in set (0.00 sec)
+
+mysql> select ename,deptname,salary case when salary >=1500 then "very hign" salary >=1500 then " hign" salary >=1500 then "low" salary >=1500 then "very low" from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'case when salary >=1500 then "very hign" salary >=1500 then " hign" salary >=150' at line 1
+mysql> select ename,deptname,salary case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500' at line 1
+mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' ' at line 1
+mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' when salary >=1500 then 'hign' when salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid' at line 1
+mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' when salary >=1500 then 'hign' when salary >=1500 then 'low' when salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
+mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low'salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid' at line 1
+mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low' when salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
+mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low' when salary >=500 then 'very low' ELSE 'unknown' from emp join dept on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
+mysql> select
+    ->
+    ->
+    -> ;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ERROR:
+No query specified
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> create table Marks(Roll int, Sub int, Marks int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table Mraks;
+ERROR 1051 (42S02): Unknown table 'dacdb.mraks'
+mysql> drop table Marks;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Marks(Roll int, Sub varchar(50), Marks int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"' at line 1
+mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"' at line 1
+mysql>
+mysql>
+mysql>
+mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,'m',92),(2,'e',94),(2,'h',20),(3,'m',36),(3,'e',37),(3,'h',38);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,'m',92),(2,'e',94),(2,'h',20),(3,'m',36),(3,'' at line 1
+mysql> insert into Marks values(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> create table Result(Roll,Result);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',Result)' at line 1
+mysql> create table Result(Roll int ,Result varchar(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40 );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank() over Marks.Roll , Avg(Roll) >= 40 )' at line 1
+mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40  'paas'^C
+mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40 )
+    ->
+    -> ;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank() over Marks.Roll , Avg(Roll) >= 40 )' at line 1
+ERROR:
+No query specified
+
+mysql>
+mysql> INSERT INTO Result (Rank, AvgResult)
+    -> SELECT RANK() OVER (ORDER BY Roll) AS Rank,
+    ->        AVG(Roll) AS AvgResult
+    -> FROM Marks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank, AvgResult)
+SELECT RANK() OVER (ORDER BY Roll) AS Rank,
+       AVG(Roll) AS' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' from Marks group by roll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by roll' at line 1
+mysql> select * from Marks;
++------+------+-------+
+| Roll | Sub  | Marks |
++------+------+-------+
+|    1 | m    |    98 |
+|    1 | e    |    96 |
+|    1 | h    |    99 |
+|    2 | m    |    92 |
+|    2 | e    |    94 |
+|    2 | h    |    20 |
+|    3 | m    |    36 |
+|    3 | e    |    37 |
+|    3 | h    |    38 |
++------+------+-------+
+9 rows in set (0.00 sec)
+
+mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' from Marks group by Roll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by Roll' at line 1
+mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' from Marks group by Roll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by Roll' at line 1
+mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' as Result from Marks group by Roll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as Result from Marks group by Roll' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' end as Result from Marks group by Roll;
++------+--------+
+| Roll | Result |
++------+--------+
+|    1 | paas   |
+|    2 | fail   |
+|    3 | fail   |
++------+--------+
+3 rows in set (0.01 sec)
+
+mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail'  as Result from Marks group by Roll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as Result from Marks group by Roll' at line 1
+mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' end as Result from Marks group by Roll;
++------+--------+
+| Roll | Result |
++------+--------+
+|    1 | paas   |
+|    2 | fail   |
+|    3 | fail   |
++------+--------+
+3 rows in set (0.00 sec)
+
+mysql> drop table Result;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> Select deptname from dept
+    -> Where not exists (select 1 from emp where emp.deptid=dept.deptid);
++----------+
+| deptname |
++----------+
+| OPR      |
++----------+
+1 row in set (0.01 sec)
+
+mysql> Select deptname from deptSelect deptname from dept
+    -> Where exists (select 1 from emp where emp.deptid=dept.deptid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from dept
+Where exists (select 1 from emp where emp.deptid=dept.deptid)' at line 1
+mysql> select deptname from dept Where exists (select 1 from emp where emp.deptid=dept.deptid);
++----------+
+| deptname |
++----------+
+| HR       |
+| IT       |
+| Finance  |
++----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptname from dept Where exists (select 1 from emp where emp.deptid=dept.deptid);
++----------+
+| deptname |
++----------+
+| HR       |
+| IT       |
+| Finance  |
++----------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select ename, salary from emp where exists (select 1 from emp where salary> avg(salary));
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary));
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) e1.empid = e2.empid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'e1.empid = e2.empid)' at line 1
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) e1.eid = e2.eid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'e1.eid = e2.eid)' at line 1
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) and e1.eid = e2.eid);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) or e1.eid = e2.eid);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(e2.salary) or e1.eid = e2.eid);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(e2.salary) And e1.eid = e2.eid);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having e2.salary > avg(e2.salary) And e1.eid = e2.eid);
+ERROR 1054 (42S22): Unknown column 'e2.salary' in 'having clause'
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having e2.salary > avg(salary) And e1.eid = e2.eid);
+ERROR 1054 (42S22): Unknown column 'e2.salary' in 'having clause'
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having salary > avg(salary) And e1.eid = e2.eid);
+ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
+mysql> select ename, salary from emp e1 where exists (select 1 from emp having salary > avg(salary) And e1.eid = e2.eid);
+ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
+mysql> select ename, salary from emp e1 where exists (select 1 from emp group by salary  having salary > avg(salary) And e1.eid = e2.eid);
+ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2  having e1.salary > avg(e2.salary) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select ename, salary from emp e1 where exists (select 1 from emp e2  having e1.salary > avg(e2.salary)) ;
++-------+--------+
+| ename | salary |
++-------+--------+
+| v     |   9029 |
+| w     |  20001 |
+| x     |  28222 |
+| y     |  19212 |
+| z     |  12111 |
+| a2    |   9238 |
+| b3    |   4212 |
+| b4    |   4444 |
+| b7    |   6432 |
+| b8    |   4532 |
+| b9    |   3355 |
++-------+--------+
+11 rows in set (0.01 sec)
+
+mysql> Create view vw_emp_dept
+    -> as
+    -> Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> show tables();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()' at line 1
+mysql> show tabels();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabels()' at line 1mysql> show tabels;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabels' at line 1
+mysql> show tables;
++-----------------+
+| Tables_in_dacdb |
++-----------------+
+| b               |
+| collage         |
+| department      |
+| dept            |
+| emp             |
+| emp_mgr         |
+| emp_rank        |
+| marks           |
+| t1              |
+| t1_uk           |
+| t1_uk_comp      |
+| t2              |
+| t_cc            |
+| t_cc2           |
+| t_child         |
+| t_def           |
+| t_nn            |
+| t_parent        |
+| teachers        |
+| vw_emp_dept     |
++-----------------+
+20 rows in set (0.02 sec)
+
+mysql> Explain select*from ve_emp_dept;
+ERROR 1146 (42S02): Table 'dacdb.ve_emp_dept' doesn't exist
+mysql> Explain select*from vw_emp_dept;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                      |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+|  1 | SIMPLE      | dept  | NULL       | ALL  | PRIMARY       | NULL | NULL    | NULL |    4 |   100.00 | NULL                                       |
+|  1 | SIMPLE      | emp   | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   45 |    10.00 | Using where; Using join buffer (hash join) |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+2 rows in set, 1 warning (0.01 sec)
+
+mysql>
+mysql> Explain select*from vw_emp_dept \g;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra
+  |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+|  1 | SIMPLE      | dept  | NULL       | ALL  | PRIMARY       | NULL | NULL    | NULL |    4 |   100.00 | NULL
+  |
+|  1 | SIMPLE      | emp   | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   45 |    10.00 | Using where; Using join buffer (hash join) |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------------------+
+2 rows in set, 1 warning (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> Explain select*from vw_emp_dept \G;
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: dept
+   partitions: NULL
+         type: ALL
+possible_keys: PRIMARY
+          key: NULL
+      key_len: NULL
+          ref: NULL
+         rows: 4
+     filtered: 100.00
+        Extra: NULL
+*************************** 2. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: emp
+   partitions: NULL
+         type: ALL
+possible_keys: NULL
+          key: NULL
+      key_len: NULL
+          ref: NULL
+         rows: 45
+     filtered: 10.00
+        Extra: Using where; Using join buffer (hash join)
+2 rows in set, 1 warning (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> show create table emp;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table
+
+                                           |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| emp   | CREATE TABLE `emp` (
+  `eid` int DEFAULT NULL,
+  `ename` varchar(20) DEFAULT NULL,
+  `salary` int DEFAULT NULL,
+  `deptid` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+       show create table emp;
+mysql> -----------------------
+       show create table emp;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table
+
+
+ |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| emp   | CREATE TABLE `emp` (
+  `eid` int DEFAULT NULL,
+  `ename` varchar(20) DEFAULT NULL,
+  `salary` int DEFAULT NULL,
+  `deptid` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> Create table test_ins(c1 int not null,c2 int not null,c3 int, c4 int, c5 int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> Create view vw_test_ins
+    -> As
+    -> Select c2,c3,c4,c5 from test_ins;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> Insert into vw_test_ins values(1,1,1,1);
+ERROR 1423 (HY000): Field of view 'dacdb.vw_test_ins' underlying table doesn't have a default value
+mysql> show tables like "vw%";
++-----------------------+
+| Tables_in_dacdb (vw%) |
++-----------------------+
+| vw_emp_dept           |
+| vw_test_ins           |
++-----------------------+
+2 rows in set (0.01 sec)
+
+mysql> Desc information_schema.tables;
++-----------------+--------------------------------------------------------------------+------+-----+---------+-------+
+| Field           | Type
+               | Null | Key | Default | Extra |
++-----------------+--------------------------------------------------------------------+------+-----+---------+-------+
+| TABLE_CATALOG   | varchar(64)
+               | YES  |     | NULL    |       |
+| TABLE_SCHEMA    | varchar(64)
+               | YES  |     | NULL    |       |
+| TABLE_NAME      | varchar(64)
+               | YES  |     | NULL    |       |
+| TABLE_TYPE      | enum('BASE TABLE','VIEW','SYSTEM VIEW')
+               | NO   |     | NULL    |       |
+| ENGINE          | varchar(64)
+               | YES  |     | NULL    |       |
+| VERSION         | int
+               | YES  |     | NULL    |       |
+| ROW_FORMAT      | enum('Fixed','Dynamic','Compressed','Redundant','Compact','Paged') | YES  |     | NULL    |       |
+| TABLE_ROWS      | bigint unsigned
+               | YES  |     | NULL    |       |
+| AVG_ROW_LENGTH  | bigint unsigned
+               | YES  |     | NULL    |       |
+| DATA_LENGTH     | bigint unsigned
+               | YES  |     | NULL    |       |
+| MAX_DATA_LENGTH | bigint unsigned
+               | YES  |     | NULL    |       |
+| INDEX_LENGTH    | bigint unsigned
+               | YES  |     | NULL    |       |
+| DATA_FREE       | bigint unsigned
+               | YES  |     | NULL    |       |
+| AUTO_INCREMENT  | bigint unsigned
+               | YES  |     | NULL    |       |
+| CREATE_TIME     | timestamp
+               | NO   |     | NULL    |       |
+| UPDATE_TIME     | datetime
+               | YES  |     | NULL    |       |
+| CHECK_TIME      | datetime
+               | YES  |     | NULL    |       |
+| TABLE_COLLATION | varchar(64)
+               | YES  |     | NULL    |       |
+| CHECKSUM        | bigint
+               | YES  |     | NULL    |       |
+| CREATE_OPTIONS  | varchar(256)
+               | YES  |     | NULL    |       |
+| TABLE_COMMENT   | text
+               | YES  |     | NULL    |       |
++-----------------+--------------------------------------------------------------------+------+-----+---------+-------+
+21 rows in set (0.00 sec)
+
+mysql> Select table_schema, table_name,table_type from information_schema.tables
+    -> Where  table_schema=database()
+    -> And table_type='VIEW';
++--------------+-------------+------------+
+| TABLE_SCHEMA | TABLE_NAME  | TABLE_TYPE |
++--------------+-------------+------------+
+| dacdb        | vw_emp_dept | VIEW       |
+| dacdb        | vw_test_ins | VIEW       |
++--------------+-------------+------------+
+2 rows in set (0.01 sec)
+
+mysql> Select table_schema, table_name,table_type from information_schema.tables
+    -> Where  table_schema=database()
+    -> And table_type='VIEW';
++--------------+-------------+------------+
+| TABLE_SCHEMA | TABLE_NAME  | TABLE_TYPE |
++--------------+-------------+------------+
+| dacdb        | vw_emp_dept | VIEW       |
+| dacdb        | vw_test_ins | VIEW       |
++--------------+-------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> Select table_schema, table_name,table_type from information_schema.tables
+    -> Where  table_schema=database()
+    -> ;;
++--------------+-------------+------------+
+| TABLE_SCHEMA | TABLE_NAME  | TABLE_TYPE |
++--------------+-------------+------------+
+| dacdb        | b           | BASE TABLE |
+| dacdb        | collage     | BASE TABLE |
+| dacdb        | department  | BASE TABLE |
+| dacdb        | dept        | BASE TABLE |
+| dacdb        | emp         | BASE TABLE |
+| dacdb        | emp_mgr     | BASE TABLE |
+| dacdb        | emp_rank    | BASE TABLE |
+| dacdb        | marks       | BASE TABLE |
+| dacdb        | t1          | BASE TABLE |
+| dacdb        | t1_uk       | BASE TABLE |
+| dacdb        | t1_uk_comp  | BASE TABLE |
+| dacdb        | t2          | BASE TABLE |
+| dacdb        | t_cc        | BASE TABLE |
+| dacdb        | t_cc2       | BASE TABLE |
+| dacdb        | t_child     | BASE TABLE |
+| dacdb        | t_def       | BASE TABLE |
+| dacdb        | t_nn        | BASE TABLE |
+| dacdb        | t_parent    | BASE TABLE |
+| dacdb        | teachers    | BASE TABLE |
+| dacdb        | test_ins    | BASE TABLE |
+| dacdb        | vw_emp_dept | VIEW       |
+| dacdb        | vw_test_ins | VIEW       |
++--------------+-------------+------------+
+22 rows in set (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> create table tab1(c1 int not null, c2 int not null, c3 int ,c4 int ,c5 int );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create view view_tab as select c2,c3,c5;
+ERROR 1054 (42S22): Unknown column 'c2' in 'field list'
+mysql> create view view_tab as select c2,c3,c5 from tab1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from view_tab;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into view_tab values(111;)
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+    -> ;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+ERROR:
+No query specified
+
+mysql> insert into view_tab values(1,1,1);
+ERROR 1423 (HY000): Field of view 'dacdb.view_tab' underlying table doesn't have a default value
+mysql> Select * from view_tab;
+Empty set (0.00 sec)
+
+mysql> Select * from vw_test_ins;
+Empty set (0.00 sec)
+
+mysql> Select * from vw_emp_dept;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a     | HR       |   1000 |
+| b     | IT       |   1023 |
+| c     | Finance  |     23 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| f     | Finance  |   2023 |
+| g     | HR       |    323 |
+| h     | IT       |    523 |
+| i     | HR       |    136 |
+| j     | HR       |    627 |
+| k     | Finance  |    978 |
+| l     | HR       |    222 |
+| m     | HR       |    746 |
+| n     | HR       |   3223 |
+| o     | Finance  |   1999 |
+| p     | Finance  |    821 |
+| q     | HR       |    324 |
+| r     | Finance  |    546 |
+| s     | IT       |    717 |
+| t     | IT       |    817 |
+| u     | Finance  |    888 |
+| v     | HR       |   9029 |
+| w     | Finance  |  20001 |
+| x     | HR       |  28222 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| a1    | HR       |   3211 |
+| a2    | HR       |   9238 |
+| a3    | Finance  |    653 |
+| a4    | HR       |     44 |
+| a5    | IT       |      3 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a8    | HR       |    845 |
+| a9    | Finance  |    135 |
+| b1    | HR       |   1212 |
+| b2    | IT       |   1242 |
+| b3    | IT       |   4212 |
+| b4    | Finance  |   4444 |
+| b5    | HR       |    555 |
+| b6    | Finance  |   1553 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b9    | HR       |   3355 |
+| c1    | IT       |   2324 |
++-------+----------+--------+
+45 rows in set (0.00 sec)
+
+mysql> update vw_emp_dept set ename='b' where ename = 'a1';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> Select * from vw_emp_dept;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a     | HR       |   1000 |
+| b     | IT       |   1023 |
+| c     | Finance  |     23 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| f     | Finance  |   2023 |
+| g     | HR       |    323 |
+| h     | IT       |    523 |
+| i     | HR       |    136 |
+| j     | HR       |    627 |
+| k     | Finance  |    978 |
+| l     | HR       |    222 |
+| m     | HR       |    746 |
+| n     | HR       |   3223 |
+| o     | Finance  |   1999 |
+| p     | Finance  |    821 |
+| q     | HR       |    324 |
+| r     | Finance  |    546 |
+| s     | IT       |    717 |
+| t     | IT       |    817 |
+| u     | Finance  |    888 |
+| v     | HR       |   9029 |
+| w     | Finance  |  20001 |
+| x     | HR       |  28222 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| b     | HR       |   3211 |
+| a2    | HR       |   9238 |
+| a3    | Finance  |    653 |
+| a4    | HR       |     44 |
+| a5    | IT       |      3 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a8    | HR       |    845 |
+| a9    | Finance  |    135 |
+| b1    | HR       |   1212 |
+| b2    | IT       |   1242 |
+| b3    | IT       |   4212 |
+| b4    | Finance  |   4444 |
+| b5    | HR       |    555 |
+| b6    | Finance  |   1553 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b9    | HR       |   3355 |
+| c1    | IT       |   2324 |
++-------+----------+--------+
+45 rows in set (0.00 sec)
+
+mysql> Insert into emp (ename) values('xyz');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> Select * from vw_emp_dept;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a     | HR       |   1000 |
+| b     | IT       |   1023 |
+| c     | Finance  |     23 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| f     | Finance  |   2023 |
+| g     | HR       |    323 |
+| h     | IT       |    523 |
+| i     | HR       |    136 |
+| j     | HR       |    627 |
+| k     | Finance  |    978 |
+| l     | HR       |    222 |
+| m     | HR       |    746 |
+| n     | HR       |   3223 |
+| o     | Finance  |   1999 |
+| p     | Finance  |    821 |
+| q     | HR       |    324 |
+| r     | Finance  |    546 |
+| s     | IT       |    717 |
+| t     | IT       |    817 |
+| u     | Finance  |    888 |
+| v     | HR       |   9029 |
+| w     | Finance  |  20001 |
+| x     | HR       |  28222 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| b     | HR       |   3211 |
+| a2    | HR       |   9238 |
+| a3    | Finance  |    653 |
+| a4    | HR       |     44 |
+| a5    | IT       |      3 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a8    | HR       |    845 |
+| a9    | Finance  |    135 |
+| b1    | HR       |   1212 |
+| b2    | IT       |   1242 |
+| b3    | IT       |   4212 |
+| b4    | Finance  |   4444 |
+| b5    | HR       |    555 |
+| b6    | Finance  |   1553 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b9    | HR       |   3355 |
+| c1    | IT       |   2324 |
++-------+----------+--------+
+45 rows in set (0.00 sec)
+
+mysql> Select * from vw_emp_dept;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a     | HR       |   1000 |
+| b     | IT       |   1023 |
+| c     | Finance  |     23 |
+| d     | Finance  |    123 |
+| e     | HR       |    102 |
+| f     | Finance  |   2023 |
+| g     | HR       |    323 |
+| h     | IT       |    523 |
+| i     | HR       |    136 |
+| j     | HR       |    627 |
+| k     | Finance  |    978 |
+| l     | HR       |    222 |
+| m     | HR       |    746 |
+| n     | HR       |   3223 |
+| o     | Finance  |   1999 |
+| p     | Finance  |    821 |
+| q     | HR       |    324 |
+| r     | Finance  |    546 |
+| s     | IT       |    717 |
+| t     | IT       |    817 |
+| u     | Finance  |    888 |
+| v     | HR       |   9029 |
+| w     | Finance  |  20001 |
+| x     | HR       |  28222 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| b     | HR       |   3211 |
+| a2    | HR       |   9238 |
+| a3    | Finance  |    653 |
+| a4    | HR       |     44 |
+| a5    | IT       |      3 |
+| a6    | HR       |     16 |
+| a7    | IT       |     14 |
+| a8    | HR       |    845 |
+| a9    | Finance  |    135 |
+| b1    | HR       |   1212 |
+| b2    | IT       |   1242 |
+| b3    | IT       |   4212 |
+| b4    | Finance  |   4444 |
+| b5    | HR       |    555 |
+| b6    | Finance  |   1553 |
+| b7    | HR       |   6432 |
+| b8    | IT       |   4532 |
+| b9    | HR       |   3355 |
+| c1    | IT       |   2324 |
++-------+----------+--------+
+45 rows in set (0.00 sec)
+
+mysql> select * from emp;
++------+-------+--------+--------+
+| eid  | ename | salary | deptid |
++------+-------+--------+--------+
+|    1 | a     |   1000 |      1 |
+|    2 | b     |   1023 |      2 |
+|    3 | c     |     23 |      3 |
+|    4 | d     |    123 |      3 |
+|    5 | e     |    102 |      1 |
+|    6 | f     |   2023 |      3 |
+|    7 | g     |    323 |      1 |
+|    8 | h     |    523 |      2 |
+|    9 | i     |    136 |      1 |
+|   10 | j     |    627 |      1 |
+|   11 | k     |    978 |      3 |
+|   12 | l     |    222 |      1 |
+|   13 | m     |    746 |      1 |
+|   14 | n     |   3223 |      1 |
+|   15 | o     |   1999 |      3 |
+|   16 | p     |    821 |      3 |
+|   17 | q     |    324 |      1 |
+|   18 | r     |    546 |      3 |
+|   19 | s     |    717 |      2 |
+|   20 | t     |    817 |      2 |
+|   21 | u     |    888 |      3 |
+|   22 | v     |   9029 |      1 |
+|   23 | w     |  20001 |      3 |
+|   24 | x     |  28222 |      1 |
+|   25 | y     |  19212 |      3 |
+|   26 | z     |  12111 |      1 |
+|   27 | b     |   3211 |      1 |
+|   28 | a2    |   9238 |      1 |
+|   29 | a3    |    653 |      3 |
+|   30 | a4    |     44 |      1 |
+|   31 | a5    |      3 |      2 |
+|   32 | a6    |     16 |      1 |
+|   33 | a7    |     14 |      2 |
+|   34 | a8    |    845 |      1 |
+|   35 | a9    |    135 |      3 |
+|   36 | b1    |   1212 |      1 |
+|   37 | b2    |   1242 |      2 |
+|   38 | b3    |   4212 |      2 |
+|   39 | b4    |   4444 |      3 |
+|   40 | b5    |    555 |      1 |
+|   41 | b6    |   1553 |      3 |
+|   42 | b7    |   6432 |      1 |
+|   43 | b8    |   4532 |      2 |
+|   44 | b9    |   3355 |      1 |
+|   45 | c1    |   2324 |      2 |
+| NULL | xyz   |   NULL |   NULL |
++------+-------+--------+--------+
+46 rows in set (0.00 sec)
+
+mysql> Select salary,count(*) from emp
+    -> Group by salary having count(*)>1;
+Empty set (0.00 sec)
+
+mysql> insert into emp values(46,'test',20001,2);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> Select salary,count(*) from emp group b salary having(*)>1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'b salary having(*)>1' at line 1
+mysql> Select salary,count(*) from emp
+    -> Group by salary having count(*)>1;
++--------+----------+
+| salary | count(*) |
++--------+----------+
+|  20001 |        2 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> Select salary,count(*) from emp group by salary having(*)>1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*)>1' at line 1
+mysql> Select salary,count(*) from emp group by salary having count(*)>1;
++--------+----------+
+| salary | count(*) |
++--------+----------+
+|  20001 |        2 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select ename,salary, (select sum(salary) from emp e2 where e2.salary > e1.salary )runing_salary_total from emp e1;
++-------+--------+---------------------+
+| ename | salary | runing_salary_total |
++-------+--------+---------------------+
+| a     |   1000 |              158599 |
+| b     |   1023 |              157576 |
+| c     |     23 |              169724 |
+| d     |    123 |              169455 |
+| e     |    102 |              169578 |
+| f     |   2023 |              149547 |
+| g     |    323 |              168639 |
+| h     |    523 |              167792 |
+| i     |    136 |              169184 |
+| j     |    627 |              166064 |
+| k     |    978 |              159599 |
+| l     |    222 |              168962 |
+| m     |    746 |              163948 |
+| n     |   3223 |              140789 |
+| o     |   1999 |              151570 |
+| p     |    821 |              162310 |
+| q     |    324 |              168315 |
+| r     |    546 |              167246 |
+| s     |    717 |              164694 |
+| t     |    817 |              163131 |
+| u     |    888 |              160577 |
+| v     |   9029 |              108785 |
+| w     |  20001 |               28222 |
+| x     |  28222 |                NULL |
+| y     |  19212 |               68224 |
+| z     |  12111 |               87436 |
+| b     |   3211 |              144012 |
+| a2    |   9238 |               99547 |
+| a3    |    653 |              165411 |
+| a4    |     44 |              169680 |
+| a5    |      3 |              169777 |
+| a6    |     16 |              169747 |
+| a7    |     14 |              169763 |
+| a8    |    845 |              161465 |
+| a9    |    135 |              169320 |
+| b1    |   1212 |              156364 |
+| b2    |   1242 |              155122 |
+| b3    |   4212 |              133222 |
+| b4    |   4444 |              128778 |
+| b5    |    555 |              166691 |
+| b6    |   1553 |              153569 |
+| b7    |   6432 |              117814 |
+| b8    |   4532 |              124246 |
+| b9    |   3355 |              137434 |
+| c1    |   2324 |              147223 |
+| xyz   |   NULL |                NULL |
+| test  |  20001 |               28222 |
++-------+--------+---------------------+
+47 rows in set (0.01 sec)
+
+mysql> select ename,salary, (select sum(salary) from emp e2 where e2.salary > e1.salary )runing_salary_total from emp e1 order by salary desc;
++-------+--------+---------------------+
+| ename | salary | runing_salary_total |
++-------+--------+---------------------+
+| x     |  28222 |                NULL |
+| w     |  20001 |               28222 |
+| test  |  20001 |               28222 |
+| y     |  19212 |               68224 |
+| z     |  12111 |               87436 |
+| a2    |   9238 |               99547 |
+| v     |   9029 |              108785 |
+| b7    |   6432 |              117814 |
+| b8    |   4532 |              124246 |
+| b4    |   4444 |              128778 |
+| b3    |   4212 |              133222 |
+| b9    |   3355 |              137434 |
+| n     |   3223 |              140789 |
+| b     |   3211 |              144012 |
+| c1    |   2324 |              147223 |
+| f     |   2023 |              149547 |
+| o     |   1999 |              151570 |
+| b6    |   1553 |              153569 |
+| b2    |   1242 |              155122 |
+| b1    |   1212 |              156364 |
+| b     |   1023 |              157576 |
+| a     |   1000 |              158599 |
+| k     |    978 |              159599 |
+| u     |    888 |              160577 |
+| a8    |    845 |              161465 |
+| p     |    821 |              162310 |
+| t     |    817 |              163131 |
+| m     |    746 |              163948 |
+| s     |    717 |              164694 |
+| a3    |    653 |              165411 |
+| j     |    627 |              166064 |
+| b5    |    555 |              166691 |
+| r     |    546 |              167246 |
+| h     |    523 |              167792 |
+| q     |    324 |              168315 |
+| g     |    323 |              168639 |
+| l     |    222 |              168962 |
+| i     |    136 |              169184 |
+| a9    |    135 |              169320 |
+| d     |    123 |              169455 |
+| e     |    102 |              169578 |
+| a4    |     44 |              169680 |
+| c     |     23 |              169724 |
+| a6    |     16 |              169747 |
+| a7    |     14 |              169763 |
+| a5    |      3 |              169777 |
+| xyz   |   NULL |                NULL |
++-------+--------+---------------------+
+47 rows in set (0.00 sec)
+
+mysql> select ename,salary, (select sum(salary) from emp e2 where e2.salary > e1.salary )runing_salary_total from emp e1 order by salary desc,eid;
++-------+--------+---------------------+
+| ename | salary | runing_salary_total |
++-------+--------+---------------------+
+| x     |  28222 |                NULL |
+| w     |  20001 |               28222 |
+| test  |  20001 |               28222 |
+| y     |  19212 |               68224 |
+| z     |  12111 |               87436 |
+| a2    |   9238 |               99547 |
+| v     |   9029 |              108785 |
+| b7    |   6432 |              117814 |
+| b8    |   4532 |              124246 |
+| b4    |   4444 |              128778 |
+| b3    |   4212 |              133222 |
+| b9    |   3355 |              137434 |
+| n     |   3223 |              140789 |
+| b     |   3211 |              144012 |
+| c1    |   2324 |              147223 |
+| f     |   2023 |              149547 |
+| o     |   1999 |              151570 |
+| b6    |   1553 |              153569 |
+| b2    |   1242 |              155122 |
+| b1    |   1212 |              156364 |
+| b     |   1023 |              157576 |
+| a     |   1000 |              158599 |
+| k     |    978 |              159599 |
+| u     |    888 |              160577 |
+| a8    |    845 |              161465 |
+| p     |    821 |              162310 |
+| t     |    817 |              163131 |
+| m     |    746 |              163948 |
+| s     |    717 |              164694 |
+| a3    |    653 |              165411 |
+| j     |    627 |              166064 |
+| b5    |    555 |              166691 |
+| r     |    546 |              167246 |
+| h     |    523 |              167792 |
+| q     |    324 |              168315 |
+| g     |    323 |              168639 |
+| l     |    222 |              168962 |
+| i     |    136 |              169184 |
+| a9    |    135 |              169320 |
+| d     |    123 |              169455 |
+| e     |    102 |              169578 |
+| a4    |     44 |              169680 |
+| c     |     23 |              169724 |
+| a6    |     16 |              169747 |
+| a7    |     14 |              169763 |
+| a5    |      3 |              169777 |
+| xyz   |   NULL |                NULL |
++-------+--------+---------------------+
+47 rows in set (0.00 sec)
+
+mysql> select ename,salary , (select salary from emp as e2 where e2.salary > e1.salary or (e2.salary = e1.salary and e2.eid<=e1.eid)) as runing_salary_total from emp as e1 order by  salary desc, eid;
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select ename,salary , (select sum(salary) from emp as e2 where e2.salary > e1.salary or (e2.salary = e1.salary and e2.eid<=e1.eid)) as runing_salary_total from emp as e1 order by  salary desc, eid;
++-------+--------+---------------------+
+| ename | salary | runing_salary_total |
++-------+--------+---------------------+
+| x     |  28222 |               28222 |
+| w     |  20001 |               48223 |
+| test  |  20001 |               68224 |
+| y     |  19212 |               87436 |
+| z     |  12111 |               99547 |
+| a2    |   9238 |              108785 |
+| v     |   9029 |              117814 |
+| b7    |   6432 |              124246 |
+| b8    |   4532 |              128778 |
+| b4    |   4444 |              133222 |
+| b3    |   4212 |              137434 |
+| b9    |   3355 |              140789 |
+| n     |   3223 |              144012 |
+| b     |   3211 |              147223 |
+| c1    |   2324 |              149547 |
+| f     |   2023 |              151570 |
+| o     |   1999 |              153569 |
+| b6    |   1553 |              155122 |
+| b2    |   1242 |              156364 |
+| b1    |   1212 |              157576 |
+| b     |   1023 |              158599 |
+| a     |   1000 |              159599 |
+| k     |    978 |              160577 |
+| u     |    888 |              161465 |
+| a8    |    845 |              162310 |
+| p     |    821 |              163131 |
+| t     |    817 |              163948 |
+| m     |    746 |              164694 |
+| s     |    717 |              165411 |
+| a3    |    653 |              166064 |
+| j     |    627 |              166691 |
+| b5    |    555 |              167246 |
+| r     |    546 |              167792 |
+| h     |    523 |              168315 |
+| q     |    324 |              168639 |
+| g     |    323 |              168962 |
+| l     |    222 |              169184 |
+| i     |    136 |              169320 |
+| a9    |    135 |              169455 |
+| d     |    123 |              169578 |
+| e     |    102 |              169680 |
+| a4    |     44 |              169724 |
+| c     |     23 |              169747 |
+| a6    |     16 |              169763 |
+| a7    |     14 |              169777 |
+| a5    |      3 |              169780 |
+| xyz   |   NULL |                NULL |
++-------+--------+---------------------+
+47 rows in set (0.01 sec)
+
+mysql> Select ename,salary,sum(salary) from emp;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
+mysql> Select ename,salary,sum(salary) from emp;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
+mysql> Select ename,salary,sum(salary) as a from emp;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
+mysql> Select ename,salary,sum(salary) over() a from emp;
++-------+--------+--------+
+| ename | salary | a      |
++-------+--------+--------+
+| a     |   1000 | 169780 |
+| b     |   1023 | 169780 |
+| c     |     23 | 169780 |
+| d     |    123 | 169780 |
+| e     |    102 | 169780 |
+| f     |   2023 | 169780 |
+| g     |    323 | 169780 |
+| h     |    523 | 169780 |
+| i     |    136 | 169780 |
+| j     |    627 | 169780 |
+| k     |    978 | 169780 |
+| l     |    222 | 169780 |
+| m     |    746 | 169780 |
+| n     |   3223 | 169780 |
+| o     |   1999 | 169780 |
+| p     |    821 | 169780 |
+| q     |    324 | 169780 |
+| r     |    546 | 169780 |
+| s     |    717 | 169780 |
+| t     |    817 | 169780 |
+| u     |    888 | 169780 |
+| v     |   9029 | 169780 |
+| w     |  20001 | 169780 |
+| x     |  28222 | 169780 |
+| y     |  19212 | 169780 |
+| z     |  12111 | 169780 |
+| b     |   3211 | 169780 |
+| a2    |   9238 | 169780 |
+| a3    |    653 | 169780 |
+| a4    |     44 | 169780 |
+| a5    |      3 | 169780 |
+| a6    |     16 | 169780 |
+| a7    |     14 | 169780 |
+| a8    |    845 | 169780 |
+| a9    |    135 | 169780 |
+| b1    |   1212 | 169780 |
+| b2    |   1242 | 169780 |
+| b3    |   4212 | 169780 |
+| b4    |   4444 | 169780 |
+| b5    |    555 | 169780 |
+| b6    |   1553 | 169780 |
+| b7    |   6432 | 169780 |
+| b8    |   4532 | 169780 |
+| b9    |   3355 | 169780 |
+| c1    |   2324 | 169780 |
+| xyz   |   NULL | 169780 |
+| test  |  20001 | 169780 |
++-------+--------+--------+
+47 rows in set (0.00 sec)
+
+mysql> Select ename,salary,sum(salary) over(order by salary desc
+    -> Rows between unbounded preceding and current row) running_total_salary from emp;
++-------+--------+----------------------+
+| ename | salary | running_total_salary |
++-------+--------+----------------------+
+| x     |  28222 |                28222 |
+| w     |  20001 |                48223 |
+| test  |  20001 |                68224 |
+| y     |  19212 |                87436 |
+| z     |  12111 |                99547 |
+| a2    |   9238 |               108785 |
+| v     |   9029 |               117814 |
+| b7    |   6432 |               124246 |
+| b8    |   4532 |               128778 |
+| b4    |   4444 |               133222 |
+| b3    |   4212 |               137434 |
+| b9    |   3355 |               140789 |
+| n     |   3223 |               144012 |
+| b     |   3211 |               147223 |
+| c1    |   2324 |               149547 |
+| f     |   2023 |               151570 |
+| o     |   1999 |               153569 |
+| b6    |   1553 |               155122 |
+| b2    |   1242 |               156364 |
+| b1    |   1212 |               157576 |
+| b     |   1023 |               158599 |
+| a     |   1000 |               159599 |
+| k     |    978 |               160577 |
+| u     |    888 |               161465 |
+| a8    |    845 |               162310 |
+| p     |    821 |               163131 |
+| t     |    817 |               163948 |
+| m     |    746 |               164694 |
+| s     |    717 |               165411 |
+| a3    |    653 |               166064 |
+| j     |    627 |               166691 |
+| b5    |    555 |               167246 |
+| r     |    546 |               167792 |
+| h     |    523 |               168315 |
+| q     |    324 |               168639 |
+| g     |    323 |               168962 |
+| l     |    222 |               169184 |
+| i     |    136 |               169320 |
+| a9    |    135 |               169455 |
+| d     |    123 |               169578 |
+| e     |    102 |               169680 |
+| a4    |     44 |               169724 |
+| c     |     23 |               169747 |
+| a6    |     16 |               169763 |
+| a7    |     14 |               169777 |
+| a5    |      3 |               169780 |
+| xyz   |   NULL |               169780 |
++-------+--------+----------------------+
+47 rows in set (0.00 sec)
+
+mysql> select ename,salary,sum(salary) over(oredr by salary desc ) from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) from emp' at line 1
+mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _totalfrom emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _totalfrom emp' at line 1
+mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _total from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _total from emp' at line 1
+mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _total from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _total from emp' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select ename,salary,sum(salary) over(order by salary desc ) running _total from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
+mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running _total from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
+mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running _total from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running_total from emp;
++-------+--------+---------------+
+| ename | salary | running_total |
++-------+--------+---------------+
+| x     |  28222 |         28222 |
+| w     |  20001 |         48223 |
+| test  |  20001 |         68224 |
+| y     |  19212 |         87436 |
+| z     |  12111 |         99547 |
+| a2    |   9238 |        108785 |
+| v     |   9029 |        117814 |
+| b7    |   6432 |        124246 |
+| b8    |   4532 |        128778 |
+| b4    |   4444 |        133222 |
+| b3    |   4212 |        137434 |
+| b9    |   3355 |        140789 |
+| n     |   3223 |        144012 |
+| b     |   3211 |        147223 |
+| c1    |   2324 |        149547 |
+| f     |   2023 |        151570 |
+| o     |   1999 |        153569 |
+| b6    |   1553 |        155122 |
+| b2    |   1242 |        156364 |
+| b1    |   1212 |        157576 |
+| b     |   1023 |        158599 |
+| a     |   1000 |        159599 |
+| k     |    978 |        160577 |
+| u     |    888 |        161465 |
+| a8    |    845 |        162310 |
+| p     |    821 |        163131 |
+| t     |    817 |        163948 |
+| m     |    746 |        164694 |
+| s     |    717 |        165411 |
+| a3    |    653 |        166064 |
+| j     |    627 |        166691 |
+| b5    |    555 |        167246 |
+| r     |    546 |        167792 |
+| h     |    523 |        168315 |
+| q     |    324 |        168639 |
+| g     |    323 |        168962 |
+| l     |    222 |        169184 |
+| i     |    136 |        169320 |
+| a9    |    135 |        169455 |
+| d     |    123 |        169578 |
+| e     |    102 |        169680 |
+| a4    |     44 |        169724 |
+| c     |     23 |        169747 |
+| a6    |     16 |        169763 |
+| a7    |     14 |        169777 |
+| a5    |      3 |        169780 |
+| xyz   |   NULL |        169780 |
++-------+--------+---------------+
+47 rows in set (0.00 sec)
+
+mysql> select ename,salary,sum(salary) over (order by salary desc ) running_total from emp;
++-------+--------+---------------+
+| ename | salary | running_total |
++-------+--------+---------------+
+| x     |  28222 |         28222 |
+| w     |  20001 |         68224 |
+| test  |  20001 |         68224 |
+| y     |  19212 |         87436 |
+| z     |  12111 |         99547 |
+| a2    |   9238 |        108785 |
+| v     |   9029 |        117814 |
+| b7    |   6432 |        124246 |
+| b8    |   4532 |        128778 |
+| b4    |   4444 |        133222 |
+| b3    |   4212 |        137434 |
+| b9    |   3355 |        140789 |
+| n     |   3223 |        144012 |
+| b     |   3211 |        147223 |
+| c1    |   2324 |        149547 |
+| f     |   2023 |        151570 |
+| o     |   1999 |        153569 |
+| b6    |   1553 |        155122 |
+| b2    |   1242 |        156364 |
+| b1    |   1212 |        157576 |
+| b     |   1023 |        158599 |
+| a     |   1000 |        159599 |
+| k     |    978 |        160577 |
+| u     |    888 |        161465 |
+| a8    |    845 |        162310 |
+| p     |    821 |        163131 |
+| t     |    817 |        163948 |
+| m     |    746 |        164694 |
+| s     |    717 |        165411 |
+| a3    |    653 |        166064 |
+| j     |    627 |        166691 |
+| b5    |    555 |        167246 |
+| r     |    546 |        167792 |
+| h     |    523 |        168315 |
+| q     |    324 |        168639 |
+| g     |    323 |        168962 |
+| l     |    222 |        169184 |
+| i     |    136 |        169320 |
+| a9    |    135 |        169455 |
+| d     |    123 |        169578 |
+| e     |    102 |        169680 |
+| a4    |     44 |        169724 |
+| c     |     23 |        169747 |
+| a6    |     16 |        169763 |
+| a7    |     14 |        169777 |
+| a5    |      3 |        169780 |
+| xyz   |   NULL |        169780 |
++-------+--------+---------------+
+47 rows in set (0.00 sec)
+
+mysql> select ename,salary,sum(salary) over (order by salary desc rows between unbounded preceding and current row) running_total from emp;
++-------+--------+---------------+
+| ename | salary | running_total |
++-------+--------+---------------+
+| x     |  28222 |         28222 |
+| w     |  20001 |         48223 |
+| test  |  20001 |         68224 |
+| y     |  19212 |         87436 |
+| z     |  12111 |         99547 |
+| a2    |   9238 |        108785 |
+| v     |   9029 |        117814 |
+| b7    |   6432 |        124246 |
+| b8    |   4532 |        128778 |
+| b4    |   4444 |        133222 |
+| b3    |   4212 |        137434 |
+| b9    |   3355 |        140789 |
+| n     |   3223 |        144012 |
+| b     |   3211 |        147223 |
+| c1    |   2324 |        149547 |
+| f     |   2023 |        151570 |
+| o     |   1999 |        153569 |
+| b6    |   1553 |        155122 |
+| b2    |   1242 |        156364 |
+| b1    |   1212 |        157576 |
+| b     |   1023 |        158599 |
+| a     |   1000 |        159599 |
+| k     |    978 |        160577 |
+| u     |    888 |        161465 |
+| a8    |    845 |        162310 |
+| p     |    821 |        163131 |
+| t     |    817 |        163948 |
+| m     |    746 |        164694 |
+| s     |    717 |        165411 |
+| a3    |    653 |        166064 |
+| j     |    627 |        166691 |
+| b5    |    555 |        167246 |
+| r     |    546 |        167792 |
+| h     |    523 |        168315 |
+| q     |    324 |        168639 |
+| g     |    323 |        168962 |
+| l     |    222 |        169184 |
+| i     |    136 |        169320 |
+| a9    |    135 |        169455 |
+| d     |    123 |        169578 |
+| e     |    102 |        169680 |
+| a4    |     44 |        169724 |
+| c     |     23 |        169747 |
+| a6    |     16 |        169763 |
+| a7    |     14 |        169777 |
+| a5    |      3 |        169780 |
+| xyz   |   NULL |        169780 |
++-------+--------+---------------+
+47 rows in set (0.00 sec)
+
+mysql> Create table custprod (cid int, pid int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> insert into custprod values(1,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(1,4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(1,6);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(1,9);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(1,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(2,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(2,4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(2,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(2,18);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(3,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(3,6);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(3,9);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(3,13);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into custprod values(3,14);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> Select c1,c2,num,den,concat(round(num*100/den,2),'%') as similarity from(
+    -> Select c1.cid c1, c2.cid c2,
+    -> count(case when c1.pid=c2.pid then c1.pid else null end) num,
+    -> count(distinct c1.pid) + count(distinct c2.pid) - count(case when c1.pid=c2.pid then c1.pid else null end) den
+    -> From custprod c1 , custprod c2
+    -> Where c1.cid<c2.cid
+    -> Group by c1.cid,c2.cid) as  t;
++------+------+-----+-----+------------+
+| c1   | c2   | num | den | similarity |
++------+------+-----+-----+------------+
+|    1 |    2 |   2 |   7 | 28.57%     |
+|    1 |    3 |   3 |   7 | 42.86%     |
+|    2 |    3 |   0 |   9 | 0.00%      |
++------+------+-----+-----+------------+
+3 rows in set (0.01 sec)
