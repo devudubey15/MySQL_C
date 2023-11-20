@@ -1,5 +1,3 @@
-Microsoft Windows [Version 10.0.22621.2715]
-(c) Microsoft Corporation. All rights reserved.
 
 C:\Users\Satyakam>mysql -uroot -pdevasheesh -P3306 -Ddacdb
 mysql: [Warning] Using a password on the command line interface can be insecure.
@@ -7,13 +5,6 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 12
 Server version: 8.0.34 MySQL Community Server - GPL
 
-Copyright (c) 2000, 2023, Oracle and/or its affiliates.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql> select ename,deptname from emp join dept on dept.deptid=emp.deptid where deptid = 1;
 ERROR 1052 (23000): Column 'deptid' in where clause is ambiguous
@@ -207,148 +198,26 @@ mysql> Select ename,salary,
 +-------+--------+-------------+
 45 rows in set (0.00 sec)
 
-mysql> select ename,deptname,salary case when salary >=1500 then "very hign" salary >=1500 then " hign" salary >=1500 then "low" salary >=1500 then "very low" from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'case when salary >=1500 then "very hign" salary >=1500 then " hign" salary >=150' at line 1
-mysql> select ename,deptname,salary case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500' at line 1
-mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=1500 then 'hign' salary >=1500 then 'low'salary >=1500 then 'very low' ' at line 1
-mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' when salary >=1500 then 'hign' when salary >=1500 then 'low'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid' at line 1
-mysql> select ename,deptname,salary, case when salary >=1500 then 'very hign' when salary >=1500 then 'hign' when salary >=1500 then 'low' when salary >=1500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
-mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low'salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid' at line 1
-mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low' when salary >=500 then 'very low' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
-mysql> select ename,deptname,salary, case when salary >=2000 then 'very hign' when salary >=1500 then 'hign' when salary >=1000 then 'low' when salary >=500 then 'very low' ELSE 'unknown' from emp join dept on dept.deptid=emp.deptid;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp join dept on dept.deptid=emp.deptid' at line 1
-mysql> select
-    ->
-    ->
-    -> ;;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
-ERROR:
-No query specified
-
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
 mysql> create table Marks(Roll int, Sub int, Marks int);
 Query OK, 0 rows affected (0.03 sec)
 
-mysql> drop table Mraks;
-ERROR 1051 (42S02): Unknown table 'dacdb.mraks'
 mysql> drop table Marks;
 Query OK, 0 rows affected (0.02 sec)
 
 mysql> create table Marks(Roll int, Sub varchar(50), Marks int);
 Query OK, 0 rows affected (0.02 sec)
 
-mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"' at line 1
-mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"' at line 1
 mysql>
 mysql>
 mysql>
-mysql> insert into Marks(1,'m',98),(1,'e',96),(1,'h',99),(2,'m',92),(2,'e',94),(2,'h',20),(3,'m',36),(3,'e',37),(3,'h',38);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'m',98),(1,'e',96),(1,'h',99),(2,'m',92),(2,'e',94),(2,'h',20),(3,'m',36),(3,'' at line 1
 mysql> insert into Marks values(1,'m',98),(1,'e',96),(1,'h',99),(2,"m",92),(2,"e",94),(2,"h",20),(3,"m",36),(3,"e",37),(3,"h",38);
 Query OK, 9 rows affected (0.01 sec)
 Records: 9  Duplicates: 0  Warnings: 0
 
-mysql> create table Result(Roll,Result);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',Result)' at line 1
 mysql> create table Result(Roll int ,Result varchar(10));
 Query OK, 0 rows affected (0.03 sec)
 
-mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40 );
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank() over Marks.Roll , Avg(Roll) >= 40 )' at line 1
-mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40  'paas'^C
-mysql> insert into Result (Rank() over Marks.Roll , Avg(Roll) >= 40 )
-    ->
-    -> ;;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank() over Marks.Roll , Avg(Roll) >= 40 )' at line 1
-ERROR:
-No query specified
 
-mysql>
-mysql> INSERT INTO Result (Rank, AvgResult)
-    -> SELECT RANK() OVER (ORDER BY Roll) AS Rank,
-    ->        AVG(Roll) AS AvgResult
-    -> FROM Marks;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rank, AvgResult)
-SELECT RANK() OVER (ORDER BY Roll) AS Rank,
-       AVG(Roll) AS' at line 1
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
 mysql> select roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' from Marks group by roll;
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by roll' at line 1
 mysql> select * from Marks;
@@ -367,26 +236,7 @@ mysql> select * from Marks;
 +------+------+-------+
 9 rows in set (0.00 sec)
 
-mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' from Marks group by Roll;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by Roll' at line 1
-mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' from Marks group by Roll;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Marks group by Roll' at line 1
-mysql> select Roll, case when min(Marks)>=35 or avg(Marks)>=40 then 'paas' else 'fail' as Result from Marks group by Roll;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as Result from Marks group by Roll' at line 1
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
+
 mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' end as Result from Marks group by Roll;
 +------+--------+
 | Roll | Result |
@@ -397,8 +247,7 @@ mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else
 +------+--------+
 3 rows in set (0.01 sec)
 
-mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail'  as Result from Marks group by Roll;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as Result from Marks group by Roll' at line 1
+
 mysql> select Roll, case when min(Marks)>=35 and avg(Marks)>=40 then 'paas' else 'fail' end as Result from Marks group by Roll;
 +------+--------+
 | Roll | Result |
@@ -421,10 +270,6 @@ mysql> Select deptname from dept
 +----------+
 1 row in set (0.01 sec)
 
-mysql> Select deptname from deptSelect deptname from dept
-    -> Where exists (select 1 from emp where emp.deptid=dept.deptid);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from dept
-Where exists (select 1 from emp where emp.deptid=dept.deptid)' at line 1
 mysql> select deptname from dept Where exists (select 1 from emp where emp.deptid=dept.deptid);
 +----------+
 | deptname |
@@ -449,42 +294,6 @@ mysql>
 mysql>
 mysql>
 mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql> select ename, salary from emp where exists (select 1 from emp where salary> avg(salary));
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary));
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) e1.empid = e2.empid);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'e1.empid = e2.empid)' at line 1
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) e1.eid = e2.eid);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'e1.eid = e2.eid)' at line 1
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) and e1.eid = e2.eid);
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(salary) or e1.eid = e2.eid);
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(e2.salary) or e1.eid = e2.eid);
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 where e2.salary > avg(e2.salary) And e1.eid = e2.eid);
-ERROR 1111 (HY000): Invalid use of group function
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having e2.salary > avg(e2.salary) And e1.eid = e2.eid);
-ERROR 1054 (42S22): Unknown column 'e2.salary' in 'having clause'
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having e2.salary > avg(salary) And e1.eid = e2.eid);
-ERROR 1054 (42S22): Unknown column 'e2.salary' in 'having clause'
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2 having salary > avg(salary) And e1.eid = e2.eid);
-ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
-mysql> select ename, salary from emp e1 where exists (select 1 from emp having salary > avg(salary) And e1.eid = e2.eid);
-ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
-mysql> select ename, salary from emp e1 where exists (select 1 from emp group by salary  having salary > avg(salary) And e1.eid = e2.eid);
-ERROR 1054 (42S22): Unknown column 'e2.eid' in 'having clause'
-mysql> select ename, salary from emp e1 where exists (select 1 from emp e2  having e1.salary > avg(e2.salary) ;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
 mysql> select ename, salary from emp e1 where exists (select 1 from emp e2  having e1.salary > avg(e2.salary)) ;
 +-------+--------+
 | ename | salary |
@@ -511,11 +320,7 @@ mysql> Create view vw_emp_dept
 Query OK, 0 rows affected (0.02 sec)
 
 mysql>
-mysql> show tables();
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()' at line 1
-mysql> show tabels();
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabels()' at line 1mysql> show tabels;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabels' at line 1
+
 mysql> show tables;
 +-----------------+
 | Tables_in_dacdb |
@@ -1249,8 +1054,7 @@ mysql> select ename,salary, (select sum(salary) from emp e2 where e2.salary > e1
 +-------+--------+---------------------+
 47 rows in set (0.00 sec)
 
-mysql> select ename,salary , (select salary from emp as e2 where e2.salary > e1.salary or (e2.salary = e1.salary and e2.eid<=e1.eid)) as runing_salary_total from emp as e1 order by  salary desc, eid;
-ERROR 1242 (21000): Subquery returns more than 1 row
+
 mysql> select ename,salary , (select sum(salary) from emp as e2 where e2.salary > e1.salary or (e2.salary = e1.salary and e2.eid<=e1.eid)) as runing_salary_total from emp as e1 order by  salary desc, eid;
 +-------+--------+---------------------+
 | ename | salary | runing_salary_total |
@@ -1305,12 +1109,7 @@ mysql> select ename,salary , (select sum(salary) from emp as e2 where e2.salary 
 +-------+--------+---------------------+
 47 rows in set (0.01 sec)
 
-mysql> Select ename,salary,sum(salary) from emp;
-ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
-mysql> Select ename,salary,sum(salary) from emp;
-ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
-mysql> Select ename,salary,sum(salary) as a from emp;
-ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'dacdb.emp.ename'; this is incompatible with sql_mode=only_full_group_by
+
 mysql> Select ename,salary,sum(salary) over() a from emp;
 +-------+--------+--------+
 | ename | salary | a      |
@@ -1420,59 +1219,7 @@ mysql> Select ename,salary,sum(salary) over(order by salary desc
 +-------+--------+----------------------+
 47 rows in set (0.00 sec)
 
-mysql> select ename,salary,sum(salary) over(oredr by salary desc ) from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) from emp' at line 1
-mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _totalfrom emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _totalfrom emp' at line 1
-mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _total from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _total from emp' at line 1
-mysql> select ename,salary,sum(salary) over(oredr by salary desc ) running _total from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by salary desc ) running _total from emp' at line 1
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql> select ename,salary,sum(salary) over(order by salary desc ) running _total from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
-mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running _total from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
-mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running _total from emp;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_total from emp' at line 1
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
-mysql>
+
 mysql> select ename,salary,sum(salary) over (order by salary desc,eid ) running_total from emp;
 +-------+--------+---------------+
 | ename | salary | running_total |
