@@ -1,0 +1,173 @@
+				Questions from gpt 
+
+Questions on case:
+
+
+
+1.Categorize Workers by Salary Range:
+
+Use CASE to create a new column that categorizes workers into salary ranges (e.g., Low, Medium, High).
+
+
+select  first_name,
+case 
+when salary<50000 then 'Low'
+when salary>50000 and salary>1000000 then 'Medium'
+when salary>=100000 then 'high'
+when salary>=5000000 then 'very high'
+else 'Low' end Salary_range
+from worker;
++------------+--------------+
+| first_name | Salary_range |
++------------+--------------+
+| Monika     | high         |
+| Niharika   | Low          |
+| Vishal     | high         |
+| Amitabh    | high         |
+| Vivek      | high         |
+| Vipul      | high         |
+| Satish     | Low          |
+| Geetika    | Low          |
++------------+--------------+
+
+
+2.Create an Employee Status Column:
+
+Use CASE to create a column that indicates whether an employee is "Active" or "Inactive" based on the current date and the "JOINING_DATE" column.
+
+select first_name , 
+case 
+when curdate()<= DATE_ADD(joining_date, interval 300 day ) then 'active'
+else 'inactive' end Employee_status
+from worker;
++------------+-----------------+
+| first_name | Employee_status |
++------------+-----------------+
+| Monika     | inactive        |
+| Niharika   | inactive        |
+| Vishal     | inactive        |
+| Amitabh    | inactive        |
+| Vivek      | inactive        |
+| Vipul      | inactive        |
+| Satish     | inactive        |
+| Geetika    | inactive        |
++------------+-----------------+
+
+
+3.Determine Bonus Eligibility:
+
+Create a column indicating whether a worker is eligible for a bonus based on the following conditions: if the salary is above a certain threshold, the worker is eligible; otherwise, they are not.
+
+select first_name , 
+case 
+ when salary >=500000 then 'eligible'
+else 'not eligilble' end Bonus_Eligibility
+from worker;
++------------+-------------------+
+| first_name | Bonus_Eligibility |
++------------+-------------------+
+| Monika     | not eligilble     |
+| Niharika   | not eligilble     |
+| Vishal     | not eligilble     |
+| Amitabh    | eligible          |
+| Vivek      | eligible          |
+| Vipul      | not eligilble     |
+| Satish     | not eligilble     |
+| Geetika    | not eligilble     |
++------------+-------------------+
+
+4.Calculate Tenure:
+
+Use CASE to create a new column that calculates the tenure (in years) of each worker based on the "JOINING_DATE."
+
+
+//didn't what is tenure
+
+
+5.Combine First and Last Names:
+
+Create a column that concatenates the first and last names of workers, separated by a space.
+select concat(first_name ' ' last_name) as fullName from worker;
+select concat(first_name, ' ' ,last_name) as fullName from worker;
++-----------------+
+| fullName        |
++-----------------+
+| Monika Arora    |
+| Niharika Verma  |
+| Vishal Singhal  |
+| Amitabh Singh   |
+| Vivek Bhati     |
+| Vipul Diwan     |
+| Satish Kumar    |
+| Geetika Chauhan |
++-----------------+
+
+6.Create a Custom Employee ID:
+
+Use CASE to create a new column that generates a custom employee ID based on the worker's department and employee number.
+
+select first_name , 
+case 
+when worker_id , department then concat(worker_id,department)
+else 'none' end Custom_Employee_ID
+from worker; // mine doesn't work
+
+---------------------------------------------------------------
+SELECT
+    FIRST_NAME,
+    CASE
+        WHEN DEPARTMENT = 'HR' THEN CONCAT(WORKER_ID, 'HR')
+        WHEN DEPARTMENT = 'Admin' THEN CONCAT(WORKER_ID, 'Admin')
+        WHEN DEPARTMENT = 'Account' THEN CONCAT(WORKER_ID, 'Account')
+        ELSE 'none'
+    END AS Custom_Employee_ID
+FROM
+    worker;
++------------+--------------------+
+| FIRST_NAME | Custom_Employee_ID |
++------------+--------------------+
+| Monika     | 1HR                |
+| Niharika   | 2Admin             |
+| Vishal     | 3HR                |
+| Amitabh    | 4Admin             |
+| Vivek      | 5Admin             |
+| Vipul      | 6Account           |
+| Satish     | 7Account           |
+| Geetika    | 8Admin             |
++------------+--------------------+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Questions on correlated subquery
+
+1.Find Highest Salary Difference:
+	Find the worker(s) with the highest salary difference compared to the average salary in their department.
+
+	select * from worker where exists (select 1 )
+
+2. Identify Salary Outliers:
+	Identify workers whose salary is higher than the maximum salary in their department but lower than the overall maximum salary.
+
+3.Rank Within Department:
+	Rank workers within their department based on salary, showing only the top two earners in each department.
+
+4.Calculate Cumulative Salary:
+	Calculate the cumulative sum of salaries for each department, ordering workers by their joining date within each department.
+
+5.Count Employees in Each Department:
+	Count the number of employees in each department, and show the department with the highest number of employees.
+
+6.Find Missing IDs:
+	Identify missing worker IDs within the range of the minimum and maximum worker IDs in the table.
+
+7.Calculate Average Tenure:
+	Calculate the average tenure (in days) for each department, considering the difference between the current date and the joining date.
+
+8.Identify Salary Peers:
+	For each worker, find workers in the same department whose salary is within a 20% range of the worker's salary.
+
+9.Find Department with No Manager:
+	Identify departments that don't have any workers with "Manager" in their job title.
+
+10.Calculate Tenure Percentile:
+	Calculate the tenure percentile for each worker within their department, considering the tenure distribution.
