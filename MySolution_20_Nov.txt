@@ -1,0 +1,752 @@
+Microsoft Windows [Version 10.0.22621.2715]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Satyakam>mysql
+ERROR 1045 (28000): Access denied for user 'ODBC'@'localhost' (using password: NO)
+
+C:\Users\Satyakam>mysql -uroot -pdevasheesh
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 17
+Server version: 8.0.34 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE TABLE Worker (
+    -> WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,FIRST_NAME CHAR(25),
+    -> LAST_NAME CHAR(25),
+    -> SALARY INT(15),
+    -> JOINING_DATE DATETIME,
+    -> DEPARTMENT CHAR(25)
+    -> );
+ERROR 1046 (3D000): No database selected
+mysql> select dacdb
+    -> ;;
+ERROR 1054 (42S22): Unknown column 'dacdb' in 'field list'
+ERROR:
+No query specified
+
+mysql> select dacdb;
+ERROR 1054 (42S22): Unknown column 'dacdb' in 'field list'
+mysql> show database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dacdb              |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.03 sec)
+
+mysql> using dacdb;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'using dacdb' at line 1
+mysql> use dacdb;
+Database changed
+mysql> CREATE TABLE Worker (
+    -> WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,FIRST_NAME CHAR(25),
+    -> LAST_NAME CHAR(25),
+    -> SALARY INT(15),
+    -> JOINING_DATE DATETIME,
+    -> DEPARTMENT CHAR(25)
+    -> );
+ERROR 1050 (42S01): Table 'worker' already exists
+mysql> select * from worker where order by first_name
+    ->
+    -> ;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by first_name' at line 1
+ERROR:
+No query specified
+
+mysql> SELECT *
+    -> FROM Worker
+    -> ORDER BY FIRST_NAME ASC, DEPARTMENT DESC;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT * from worker;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker ORDER BY DEPARTMENT DESC ,first_name asc;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select first_name as Worker_name from worker;
++-------------+
+| Worker_name |
++-------------+
+| Monika      |
+| Niharika    |
+| Vishal      |
+| Amitabh     |
+| Vivek       |
+| Vipul       |
+| Satish      |
+| Geetika     |
++-------------+
+8 rows in set (0.00 sec)
+
+mysql> select upper(first_name) as Worker_name from worker;
++-------------+
+| Worker_name |
++-------------+
+| MONIKA      |
+| NIHARIKA    |
+| VISHAL      |
+| AMITABH     |
+| VIVEK       |
+| VIPUL       |
+| SATISH      |
+| GEETIKA     |
++-------------+
+8 rows in set (0.01 sec)
+
+mysql> select distinct department from worker;
++------------+
+| department |
++------------+
+| HR         |
+| Admin      |
+| Account    |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select concat(first_name ' ' last_name)from worker table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'last_name)from worker table' at line 1
+mysql> select concat(first_name ' ' last_name) as complete_name from worker table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'last_name) as complete_name from worker table' at line 1
+mysql> select concat(first_name ' ' last_name) as complete_name from worker;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'last_name) as complete_name from worker' at line 1
+mysql> select concat(first_name,' ',last_name) as complete_name from worker;
++-----------------+
+| complete_name   |
++-----------------+
+| Monika Arora    |
+| Niharika Verma  |
+| Vishal Singhal  |
+| Amitabh Singh   |
+| Vivek Bhati     |
+| Vipul Diwan     |
+| Satish Kumar    |
+| Geetika Chauhan |
++-----------------+
+8 rows in set (0.01 sec)
+
+mysql> select * from worker order by first_name;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker order by first_name , department desc;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where first_name = 'vipul' or first_name = 'satish';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+2 rows in set (0.01 sec)
+
+mysql> select * from worker where first_name <> 'vipul' or first_name <> 'satish';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where first_name != 'vipul' or first_name <> 'satish';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where first_name  ('vipul' and 'satish') not in (worker);
+ERROR 1305 (42000): FUNCTION dacdb.first_name does not exist
+mysql> select * from worker where  ('vipul' and 'satish') not in (worker);
+ERROR 1054 (42S22): Unknown column 'worker' in 'where clause'
+mysql> select * from worker where  ('vipul' and 'satish') not in (first_name);
+Empty set, 9 warnings (0.00 sec)
+
+mysql> select * from worker where  group by first_name having not in ('vipul','satish');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'group by first_name having not in ('vipul','satish')' at line 1
+mysql> select * from worker where  group by first_name having not in ('vipul','satish');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'group by first_name having not in ('vipul','satish')' at line 1
+mysql> select * from worker order by first_name not in('vishal','satish');
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker order by first_name not in('vipul','satish');
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where department = 'admin';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from table where first_name like'%a';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table where first_name like'%a'' at line 1
+mysql> select * from table where first_name like '%a';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table where first_name like '%a'' at line 1
+mysql> select * from worker where first_name like '%a';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from worker where first_name like 'a%';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from worker having count(first_name)=6, first_name like '%a' ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', first_name like '%a'' at line 1
+mysql> select * from worker having count(first_name)=6, first_name like '%h' ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', first_name like '%h'' at line 1
+mysql> select * from worker having first_name like '%h'(select first_name from worker having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker having count(first_name)=6)' at line 1
+mysql> select * from worker having first_name like '%h'(select first_name from worker having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker having count(first_name)=6)' at line 1
+mysql> select * from worker having first_name like '%h'(select first_name from worker having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker having count(first_name)=6)' at line 1
+mysql> SELECT *
+    -> FROM worker
+    -> WHERE first_name LIKE '%h'
+    ->   AND first_name IN (SELECT first_name FROM worker GROUP BY first_name HAVING COUNT(first_name) = 6);
+Empty set (0.00 sec)
+
+mysql> select * from worker having first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker group by first_name having count(first_name)=6)' at line 1
+mysql> select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker group by first_name having count(first_name)=6)' at line 1
+mysql> select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker group by first_name having count(first_name)=6)' at line 1
+mysql> select * from worker where first_name like '%h'select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from worker where first_name like '%h'(select first_name from worker gr' at line 1
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like '%h'select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from worker where first_name like '%h'(select first_name from worker gr' at line 1
+mysql> select * from worker where first_name like '%h'select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from worker where first_name like '%h'(select first_name from worker gr' at line 1
+mysql> select * from worker where first_name like '%h'select * from worker where first_name like '%h'(select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from worker where first_name like '%h'(select first_name from worker gr' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select * from worker where first_name like '%h' (select first_name from worker group by first_name having count(first_name)=6) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select first_name from worker group by first_name having count(first_name)=6)' at line 1
+mysql> select * from worker where first_name like '%h' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like 'h%' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker;;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> select * from worker where first_name like 'N%' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like 'v%' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like 'V%' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like '%V' and first_name in (select first_name from worker group by first_name having count(first_name)=6) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like '%V' and length(first_name)=6;
+Empty set (0.00 sec)
+
+mysql> select * from worker where first_name like 'V%' and length(first_name)=6;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
++-----------+------------+-----------+--------+---------------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from worker where salery between 100000 and 500000;
+ERROR 1054 (42S22): Unknown column 'salery' in 'where clause'
+mysql> select * from worker where salary between 100000 and 500000;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from worker where joining_date = 2014-02;
+Empty set, 1 warning (0.01 sec)
+
+mysql> select * from worker where joining_date = 2014-02-20;
+Empty set, 1 warning (0.00 sec)
+
+mysql> select * from worker where joining_date > 2014-02-01 and joining_date < 2014-03-01;
+Empty set, 2 warnings (0.00 sec)
+
+mysql> select * from worker where joining_date >= 2014-02-01 and joining_date < 2014-03-01;
+Empty set, 2 warnings (0.00 sec)
+
+mysql> select * from worker;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where joining_date >= 2014-02-01 and joining_date < 2014-03-01;
+Empty set, 2 warnings (0.00 sec)
+
+mysql> select * from worker where joining_date >= '2014-02-01' and joining_date < '2014-03-01';
++-----------+------------+-----------+--------+---------------------+----------R_ID | FIRST_NAME | LAST_NAME | SALAR
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+3 rows in set (0.01 sec)
+       select * from worker where joining_dat
+    ->              ent from worker where ;
+    -> ;;
+ERROR 1054 (42S22): Unknown column 'joining_dat' in 'where clause'
+ERROR:
+No query specified
+
+mysql> select department,count(worker_id) from worker group by department having department = 'admin';
++------------+------------------+
+| department | count(worker_id) |
++------------+------------------+
+| Admin      |                4 |
++------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> select first_name from worker where salary beween 50000 and 100000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'beween 50000 and 100000' at line 1
+mysql> select first_name from worker where salary between 50000 and 100000;
++------------+
+| first_name |
++------------+
+| Monika     |
+| Niharika   |
+| Satish     |
+| Geetika    |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select department,count(worker_id) from worker group by department having department = 'admin';
++------------+------------------+
+| department | count(worker_id) |
++------------+------------------+
+| Admin      |                4 |
++------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> select department,count(worker_id) from worker group by department having  order by count(worker_id) desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by count(worker_id) desc' at line 1
+mysql> select department,count(worker_id) from worker group by department having department order by count(worker_id) desc;
+Empty set, 3 warnings (0.01 sec)
+
+mysql> select department,count(worker_id) from worker group by department order by count(worker_id) desc;
++------------+------------------+
+| department | count(worker_id) |
++------------+------------------+
+| Admin      |                4 |
+| HR         |                2 |
+| Account    |                2 |
++------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from worker where department = 'manager';
+Empty set (0.00 sec)
+
+mysql> select * from worker ;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|      select * from worker ;ati     | 500000 | 2014-06-11 09:00:00 | Ad+-----------+------------+-----------+--------+---------------------+------------+6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Ac| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Ac+-----------+------------+-----------+--------+---------------------+------------+8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Ad|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |--+------------+-----------+--------+---------------------+---|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |set (0.00 sec)
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker where department = 'admin';
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from worker as o  where (select * from worker where (o.worker_id = i.worker_id)>1);
+ERROR 1054 (42S22): Unknown column 'i.worker_id' in 'where clause'
+mysql> select * from worker as o  where (select * from worker as i where (o.worker_id = i.worker_id)>1);
+ERROR 1241 (21000): Operand should contain 1 column(s)
+mysql> select * from worker as o  where (select worker_id from worker as i where (o.worker_id = i.worker_id)>1);
+Empty set (0.00 sec)
+
+mysql> select * from worker as o  where (select worker_id from worker as i where (o.worker_id = i.worker_id)>1);
+Empty set (0.00 sec)
+
+mysql> select * from worker as o  where (select worker_id from worker as i where (o.* = i.*)>1);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* = i.*)>1)' at line 1
+mysql> select * from worker where worker_id%2=0;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from worker where worker_id%2<>0;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.woreker_ref_id;
+ERROR 1054 (42S22): Unknown column 'title.woreker_ref_id' in 'on clause'mysql> select * from worker join title on worker.worker_id= title.worker_ref_id;
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE  | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager       | 2016-02-20 00:00:00 |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |             2 | Executive     | 2016-06-11 00:00:00 |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |             3 | Lead          | 2016-06-11 00:00:00 |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |             4 | Asst. Manager | 2016-06-11 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager       | 2016-06-11 00:00:00 |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |             6 | Lead          | 2016-06-11 00:00:00 |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |             7 | Executive     | 2016-06-11 00:00:00 |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |             8 | Executive     | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_ref_id ='manager';
+Empty set, 1 warning (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_ref_id ='Manager';
+Empty set, 1 warning (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_ref_id ='Manager' or worker_id;
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE  | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager       | 2016-02-20 00:00:00 |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |             2 | Executive     | 2016-06-11 00:00:00 |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |             3 | Lead          | 2016-06-11 00:00:00 |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |             4 | Asst. Manager | 2016-06-11 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager       | 2016-06-11 00:00:00 |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |             6 | Lead          | 2016-06-11 00:00:00 |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |             7 | Executive     | 2016-06-11 00:00:00 |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |             8 | Executive     | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+8 rows in set, 1 warning (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' ;
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager      | 2016-02-20 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager      | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' or wroker_id ;
+ERROR 1054 (42S22): Unknown column 'wroker_id' in 'where clause'
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' or worker_id ;
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE  | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager       | 2016-02-20 00:00:00 |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |             2 | Executive     | 2016-06-11 00:00:00 |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |             3 | Lead          | 2016-06-11 00:00:00 |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |             4 | Asst. Manager | 2016-06-11 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager       | 2016-06-11 00:00:00 |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |             6 | Lead          | 2016-06-11 00:00:00 |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |             7 | Executive     | 2016-06-11 00:00:00 |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |             8 | Executive     | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' or wroker_id ;
+ERROR 1054 (42S22): Unknown column 'wroker_id' in 'where clause'
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' or worker_id ;
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE  | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager       | 2016-02-20 00:00:00 |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |             2 | Executive     | 2016-06-11 00:00:00 |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |             3 | Lead          | 2016-06-11 00:00:00 |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |             4 | Asst. Manager | 2016-06-11 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager       | 2016-06-11 00:00:00 |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |             6 | Lead          | 2016-06-11 00:00:00 |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |             7 | Executive     | 2016-06-11 00:00:00 |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |             8 | Executive     | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+---------------+---------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from worker join title on worker.worker_id= title.worker_ref_id where title.worker_title ='Manager' ;
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT | WORKER_REF_ID | WORKER_TITLE | AFFECTED_FROM       |
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |             1 | Manager      | 2016-02-20 00:00:00 |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |             5 | Manager      | 2016-06-11 00:00:00 |
++-----------+------------+-----------+--------+---------------------+------------+---------------+--------------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from worker as o where (select worker_id from worker i where (o.joining_date = i.joining_date)>1 or (o.department = i.department)>1 ) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker as o where (select worker_id from worker as i where (o.joining_date = i.joining_date)>1 or (o.department = i.department)>1 ) ;
+Empty set (0.00 sec)
+
+mysql> select * from worker as o where (select worker_id from worker as i group by department,joining_date having count(o.joining_date = i.joining_date)>1 or count(o.department = i.department)>1 ) ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.i.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select * from worker as o where (select worker_id from worker as i where (o.joining_date = i.joining_date or o.department = i.department)>1 ) ;
+Empty set (0.00 sec)
+
+mysql> Write an SQL query to fetch duplicate records having matchingdatain some fields of a table.
+    -> ;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Write an SQL query to fetch duplicate records having matchingdatain some fields ' at line 1
+ERROR:
+No query specified
+
+mysql> SELECT *
+    -> FROM worker
+    -> WHERE (joining_date, department) IN (
+    ->     SELECT joining_date, department
+    ->     FROM worker
+    ->     GROUP BY joining_date, department
+    ->     HAVING COUNT(*) > 1
+    -> );
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from worker Rows between unbounded preceding and current row;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
+mysql> select * from worker where Rows between unbounded preceding and current select * from worker where Rows between unbounded preceding and current row;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
+mysql> select * from worker where Rows between unbounded preceding and current row;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
+mysql> select * from worker where Rows between unbounded preceding and current row;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
+mysql> SELECT OrderID, ProductID, COUNT(*)
+    -> FROM OrderDetails
+    -> GROUP BY OrderID, ProductID
+    -> HAVING COUNT(*) > 1;
+ERROR 1146 (42S02): Table 'dacdb.orderdetails' doesn't exist
+mysql> SELECT * FROM worker GROUP BY * HAVING COUNT(*) > 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* HAVING COUNT(*) > 1' at line 1
+mysql> SELECT * FROM worker GROUP BY salary,joining_date,department HAVING COUNT(*) > 1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.worker.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT * FROM worker GROUP BY salary,joining_date,department HAVING COUNT(*) > 1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.worker.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT *
+    -> FROM (
+    ->     SELECT
+    ->         *,
+    ->         ROW_NUMBER() OVER (PARTITION BY salary, joining_date, department ORDER BY worker_id) AS row_num
+    ->     FROM worker
+    -> ) AS ranked
+    -> WHERE row_num > 1;
+Empty set (0.01 sec)
+
+mysql> SELECT *
+    -> FROM (
+    ->     SELECT
+    ->         *,
+    ->         ROW_NUMBER() OVER (PARTITION BY salary, joining_date, department ORDER BY worker_id) AS row_num
+    ->     FROM worker
+    -> ) AS ranked
+    -> WHERE row_num > 1;
+Empty set (0.00 sec)
+
+mysql> select * from worker group by  Worker_id,* having count(salary)>1 or count(joining_date)>1 or count(department)>1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* having count(salary)>1 or count(joining_date)>1 or count(department)>1' at line 1
+mysql> select * from worker group by  Worker_id,* having count(salary)>1 or count(joining_date)>1 or count(department)>1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* having count(salary)>1 or count(joining_date)>1 or count(department)>1' at line 1
+mysql> SELECT salary, joining_date, department, COUNT(*)
+    -> FROM worker
+    -> GROUP BY salary, joining_date, department
+    -> HAVING COUNT(*) > 1;
+Empty set (0.00 sec)
+
+mysql>
