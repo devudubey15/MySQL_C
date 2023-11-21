@@ -265,7 +265,7 @@ mysql> select * from worker where department = 'admin';
 +-----------+------------+-----------+--------+---------------------+------------+
 4 rows in set (0.00 sec)
 
-mysql> select * from worker where first_name like '%a';  //finding last letter of the nameis 'a'
+mysql> select * from worker where first_name like '%a';  //this query is about finding the worker name which has last letter of name as  'a'
 +-----------+------------+-----------+--------+---------------------+------------+
 | WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
 +-----------+------------+-----------+--------+---------------------+------------+
@@ -275,7 +275,7 @@ mysql> select * from worker where first_name like '%a';  //finding last letter o
 +-----------+------------+-----------+--------+---------------------+------------+
 3 rows in set (0.01 sec)
 
-mysql> select * from worker where first_name like 'a%';  //finding last letter of the nameis 'a'
+mysql> select * from worker where first_name like 'a%';  ////this query is about finding the worker name which has first letter of name as  'a'
 +-----------+------------+-----------+--------+---------------------+------------+
 | WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
 +-----------+------------+-----------+--------+---------------------+------------+
@@ -284,7 +284,7 @@ mysql> select * from worker where first_name like 'a%';  //finding last letter o
 1 row in set (0.00 sec)
 
 
-mysql> SELECT *      //findout which mistake i made here
+mysql> SELECT *      //findout which mistake you made here
     -> FROM worker
     -> WHERE first_name LIKE '%h'
     ->   AND first_name IN (SELECT first_name FROM worker GROUP BY first_name HAVING COUNT(first_name) = 6);
@@ -336,8 +336,6 @@ mysql> select * from worker where first_name like 'V%' and length(first_name)=6;
 +-----------+------------+-----------+--------+---------------------+------------+
 1 row in set (0.00 sec)
 
-mysql> select * from worker where salery between 100000 and 500000;
-ERROR 1054 (42S22): Unknown column 'salery' in 'where clause'
 mysql> select * from worker where salary between 100000 and 500000;
 +-----------+------------+-----------+--------+---------------------+------------+
 | WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
@@ -380,7 +378,7 @@ mysql> select * from worker;
 mysql> select * from worker where joining_date >= 2014-02-01 and joining_date < 2014-03-01;
 Empty set, 2 warnings (0.00 sec)
 
-mysql> select * from worker where joining_date >= '2014-02-01' and joining_date < '2014-03-01';
+mysql> select * from worker where joining_date >= '2014-02-01' and joining_date < '2014-03-01'; //find out what did you change here
 +-----------+------------+-----------+--------+---------------------+----------R_ID | FIRST_NAME | LAST_NAME | SALAR
 | WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
 +-----------+------------+-----------+--------+---------------------+------------+
@@ -389,12 +387,7 @@ mysql> select * from worker where joining_date >= '2014-02-01' and joining_date 
 |         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
 +-----------+------------+-----------+--------+---------------------+------------+
 3 rows in set (0.01 sec)
-       select * from worker where joining_dat
-    ->              ent from worker where ;
-    -> ;;
-ERROR 1054 (42S22): Unknown column 'joining_dat' in 'where clause'
-ERROR:
-No query specified
+     
 
 mysql> select department,count(worker_id) from worker group by department having department = 'admin';
 +------------+------------------+
@@ -404,8 +397,6 @@ mysql> select department,count(worker_id) from worker group by department having
 +------------+------------------+
 1 row in set (0.00 sec)
 
-mysql> select first_name from worker where salary beween 50000 and 100000;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'beween 50000 and 100000' at line 1
 mysql> select first_name from worker where salary between 50000 and 100000;
 +------------+
 | first_name |
@@ -425,10 +416,6 @@ mysql> select department,count(worker_id) from worker group by department having
 +------------+------------------+
 1 row in set (0.00 sec)
 
-mysql> select department,count(worker_id) from worker group by department having  order by count(worker_id) desc;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by count(worker_id) desc' at line 1
-mysql> select department,count(worker_id) from worker group by department having department order by count(worker_id) desc;
-Empty set, 3 warnings (0.01 sec)
 
 mysql> select department,count(worker_id) from worker group by department order by count(worker_id) desc;
 +------------+------------------+
@@ -482,8 +469,7 @@ Empty set (0.00 sec)
 mysql> select * from worker as o  where (select worker_id from worker as i where (o.worker_id = i.worker_id)>1);
 Empty set (0.00 sec)
 
-mysql> select * from worker as o  where (select worker_id from worker as i where (o.* = i.*)>1);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* = i.*)>1)' at line 1
+
 mysql> select * from worker where worker_id%2=0;
 +-----------+------------+-----------+--------+---------------------+------------+
 | WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
@@ -601,18 +587,8 @@ Empty set (0.00 sec)
 mysql> select * from worker as o where (select worker_id from worker as i where (o.joining_date = i.joining_date)>1 or (o.department = i.department)>1 ) ;
 Empty set (0.00 sec)
 
-mysql> select * from worker as o where (select worker_id from worker as i group by department,joining_date having count(o.joining_date = i.joining_date)>1 or count(o.department = i.department)>1 ) ;
-ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.i.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
-mysql> select * from worker as o where (select worker_id from worker as i where (o.joining_date = i.joining_date or o.department = i.department)>1 ) ;
-Empty set (0.00 sec)
-
-mysql> Write an SQL query to fetch duplicate records having matchingdatain some fields of a table.
-    -> ;;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Write an SQL query to fetch duplicate records having matchingdatain some fields ' at line 1
-ERROR:
-No query specified
-
-mysql> SELECT *
+//Write an SQL query to fetch duplicate records having matchingdatain some fields of a table.
+mysql> SELECT *      
     -> FROM worker
     -> WHERE (joining_date, department) IN (
     ->     SELECT joining_date, department
@@ -631,52 +607,5 @@ mysql> SELECT *
 4 rows in set (0.00 sec)
 
 mysql> select * from worker Rows between unbounded preceding and current row;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
-mysql> select * from worker where Rows between unbounded preceding and current select * from worker where Rows between unbounded preceding and current row;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
-mysql> select * from worker where Rows between unbounded preceding and current row;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
-mysql> select * from worker where Rows between unbounded preceding and current row;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Rows between unbounded preceding and current row' at line 1
-mysql> SELECT OrderID, ProductID, COUNT(*)
-    -> FROM OrderDetails
-    -> GROUP BY OrderID, ProductID
-    -> HAVING COUNT(*) > 1;
-ERROR 1146 (42S02): Table 'dacdb.orderdetails' doesn't exist
-mysql> SELECT * FROM worker GROUP BY * HAVING COUNT(*) > 1;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* HAVING COUNT(*) > 1' at line 1
-mysql> SELECT * FROM worker GROUP BY salary,joining_date,department HAVING COUNT(*) > 1;
-ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.worker.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
-mysql> SELECT * FROM worker GROUP BY salary,joining_date,department HAVING COUNT(*) > 1;
-ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'dacdb.worker.WORKER_ID' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
-mysql> SELECT *
-    -> FROM (
-    ->     SELECT
-    ->         *,
-    ->         ROW_NUMBER() OVER (PARTITION BY salary, joining_date, department ORDER BY worker_id) AS row_num
-    ->     FROM worker
-    -> ) AS ranked
-    -> WHERE row_num > 1;
-Empty set (0.01 sec)
 
-mysql> SELECT *
-    -> FROM (
-    ->     SELECT
-    ->         *,
-    ->         ROW_NUMBER() OVER (PARTITION BY salary, joining_date, department ORDER BY worker_id) AS row_num
-    ->     FROM worker
-    -> ) AS ranked
-    -> WHERE row_num > 1;
-Empty set (0.00 sec)
 
-mysql> select * from worker group by  Worker_id,* having count(salary)>1 or count(joining_date)>1 or count(department)>1;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* having count(salary)>1 or count(joining_date)>1 or count(department)>1' at line 1
-mysql> select * from worker group by  Worker_id,* having count(salary)>1 or count(joining_date)>1 or count(department)>1;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* having count(salary)>1 or count(joining_date)>1 or count(department)>1' at line 1
-mysql> SELECT salary, joining_date, department, COUNT(*)
-    -> FROM worker
-    -> GROUP BY salary, joining_date, department
-    -> HAVING COUNT(*) > 1;
-Empty set (0.00 sec)
-
-mysql>
