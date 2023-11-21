@@ -23,7 +23,6 @@ The content in this repository covers a wide range of SQL topics, including:
 - Basic SQL Queries
 - Intermediate SQL Concepts
 - Advanced SQL Techniques
-- Real-world Projects
 
 Feel free to explore the folders and files to find queries and projects that match your current skill level and learning goals.
 
