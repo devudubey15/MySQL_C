@@ -1,5 +1,5 @@
-Q1. Write a recursive query to display position of all occurences of a string in a given string.
-ANS: -
+--recursive query to display position of all occurences of a string in a given string.
+
 
 delimiter $$
 create function findalloccurrences(mainstring varchar(255), substring varchar(255))
@@ -24,8 +24,8 @@ end $$
 delimiter ;
 
 
-Q2. Write a function to return position Nth occurence of a string in a given string.
-ANS: -
+--function to return position Nth occurence of a string in a given string.
+
 
 delimiter $$
 create function findnthoccurrence(mainstring varchar(255), substring varchar(255), n int)
