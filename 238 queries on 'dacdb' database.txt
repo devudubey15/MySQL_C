@@ -37,7 +37,7 @@ CREATE TABLE Employee (
 
 
 
------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -191,4 +191,4 @@ WHERE
     A) SELECT empno, ename, sal, MONTHS_BETWEEN(SYSDATE, hiredate) AS exp
        FROM emp WHERE mgr = 7369;
 	
-	select employeeid,firstname,salary,timestampdiff(YEAR,dateofjoining,curdate()) as experince from employee where managerid =2;
+select employeeid,firstname,salary,timestampdiff(YEAR,dateofjoining,curdate()) as experince from employee where managerid =2;
