@@ -1,0 +1,194 @@
+238 queries on 'dacdb' database
+-------------------------------
+-- Location table
+CREATE TABLE Location (
+    LocationID INT PRIMARY KEY,
+    City VARCHAR(50),
+    State VARCHAR(50),
+    Country VARCHAR(50)
+);
+
+-- Department table
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50),
+    LocationID INT,
+    FOREIGN KEY (LocationID) REFERENCES Location(LocationID)
+);
+
+-- Employee table
+CREATE TABLE Employee (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    JobTitle VARCHAR(50),
+    DepartmentID INT,
+    ManagerID INT,
+    Salary DECIMAL(10, 2),
+    DateOfJoining DATE,
+    LocationID INT,
+    DateOfBirth DATE,
+    FOREIGN KEY (LocationID) REFERENCES Location(LocationID),
+    FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID),
+    FOREIGN KEY (ManagerID) REFERENCES Employee(EmployeeID)
+);
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- Insert data into Location table
+INSERT INTO Location (LocationID, City, State, Country) VALUES
+(1, 'New York', 'NY', 'USA'),
+(2, 'London', NULL, 'UK'),
+(3, 'Paris', NULL, 'France'),
+(4, 'Berlin', NULL, 'Germany'),
+(5, 'Tokyo', NULL, 'Japan');
+
+-- Insert data into Department table
+INSERT INTO Department (DepartmentID, DepartmentName, LocationID) VALUES
+(101, 'HR', 1),
+(102, 'IT', 2),
+(103, 'Finance', 3),
+(104, 'Marketing', 4),
+(105, 'Operations', 5);
+
+-- Insert data into Employee table
+INSERT INTO Employee (EmployeeID, FirstName, LastName, JobTitle, DepartmentID, ManagerID, Salary, DateOfJoining, LocationID, DateOfBirth) VALUES
+(1, 'John', 'Doe', 'HR Manager', 101, NULL, 80000.00, '2022-01-10', 1, '1980-05-15'),
+(2, 'Jane', 'Smith', 'Software Developer', 102, 1, 70000.00, '2022-02-15', 2, '1990-08-20'),
+(3, 'Robert', 'Johnson', 'Financial Analyst', 103, 1, 75000.00, '2022-03-20', 3, '1985-04-25'),
+(4, 'Emily', 'White', 'Marketing Specialist', 104, 1, 85000.00, '2022-04-05', 4, '1992-11-10'),
+(5, 'David', 'Lee', 'Operations Manager', 105, NULL, 90000.00, '2022-05-12', 5, '1982-07-30'),
+-- Add more records as needed
+(6, 'Amanda', 'Jones', 'HR Coordinator', 101, 1, 60000.00, '2022-06-18', 1, '1995-01-08'),
+(7, 'Michael', 'Miller', 'Software Engineer', 102, 2, 72000.00, '2022-07-22', 2, '1988-09-14'),
+(8, 'Sophia', 'Brown', 'Financial Planner', 103, 3, 78000.00, '2022-08-30', 3, '1993-03-05'),
+(9, 'Daniel', 'Davis', 'Marketing Coordinator', 104, 4, 80000.00, '2022-09-10', 4, '1990-06-12'),
+(10, 'Olivia', 'Martin', 'Operations Specialist', 105, 5, 85000.00, '2022-10-14', 5, '1987-12-18'),
+-- Add more records as needed
+(11, 'Ryan', 'Anderson', 'HR Specialist', 101, 1, 65000.00, '2022-11-25', 1, '1994-06-08'),
+(12, 'Emma', 'Wilson', 'Software Tester', 102, 2, 68000.00, '2022-12-05', 2, '1986-02-15'),
+(13, 'Christopher', 'Moore', 'Financial Advisor', 103, 3, 72000.00, '2023-01-10', 3, '1991-09-20'),
+(14, 'Ella', 'Harris', 'Marketing Analyst', 104, 4, 79000.00, '2023-02-18', 4, '1989-04-12'),
+(15, 'Andrew', 'Thompson', 'Operations Coordinator', 105, 5, 88000.00, '2023-03-22', 5, '1983-11-30'),
+(16, 'Grace', 'Evans', 'HR Assistant', 101, 11, 58000.00, '2023-04-08', 1, '1996-03-25'),
+(17, 'Jackson', 'Cooper', 'Software Developer', 102, 12, 74000.00, '2023-05-15', 2, '1987-07-10'),
+(18, 'Scarlett', 'Wright', 'Financial Analyst', 103, 13, 76000.00, '2023-06-20', 3, '1992-05-18'),
+(19, 'Henry', 'Baker', 'Marketing Coordinator', 104, 14, 81000.00, '2023-07-05', 4, '1995-10-22'),
+(20, 'Madison', 'Fisher', 'Operations Specialist', 105, 15, 92000.00, '2023-08-12', 5, '1984-12-28');
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
++------------+----------+-------+---------+
+| LocationID | City     | State | Country |
++------------+----------+-------+---------+
+|          1 | New York | NY    | USA     |
+|          2 | London   | NULL  | UK      |
+|          3 | Paris    | NULL  | France  |
+|          4 | Berlin   | NULL  | Germany |
+|          5 | Tokyo    | NULL  | Japan   |
++------------+----------+-------+---------+
+
+-------------------------------------------------------------
+
++--------------+----------------+------------+
+| DepartmentID | DepartmentName | LocationID |
++--------------+----------------+------------+
+|          101 | HR             |          1 |
+|          102 | IT             |          2 |
+|          103 | Finance        |          3 |
+|          104 | Marketing      |          4 |
+|          105 | Operations     |          5 |
++--------------+----------------+------------+
+
+------------------------------------------------------------
+
+
++------------+-------------+----------+------------------------+--------------+-----------+----------+---------------+------------+-------------+
+| EmployeeID | FirstName   | LastName | JobTitle               | DepartmentID | ManagerID | Salary   | DateOfJoining | LocationID | DateOfBirth |
++------------+-------------+----------+------------------------+--------------+-----------+----------+---------------+------------+-------------+
+|          1 | John        | Doe      | HR Manager             |          101 |      NULL | 80000.00 | 2022-01-10    |          1 | 1980-05-15  |
+|          2 | Jane        | Smith    | Software Developer     |          102 |         1 | 70000.00 | 2022-02-15    |          2 | 1990-08-20  |
+|          3 | Robert      | Johnson  | Financial Analyst      |          103 |         1 | 75000.00 | 2022-03-20    |          3 | 1985-04-25  |
+|          4 | Emily       | White    | Marketing Specialist   |          104 |         1 | 85000.00 | 2022-04-05    |          4 | 1992-11-10  |
+|          5 | David       | Lee      | Operations Manager     |          105 |      NULL | 90000.00 | 2022-05-12    |          5 | 1982-07-30  |
+|          6 | Amanda      | Jones    | HR Coordinator         |          101 |         1 | 60000.00 | 2022-06-18    |          1 | 1995-01-08  |
+|          7 | Michael     | Miller   | Software Engineer      |          102 |         2 | 72000.00 | 2022-07-22    |          2 | 1988-09-14  |
+|          8 | Sophia      | Brown    | Financial Planner      |          103 |         3 | 78000.00 | 2022-08-30    |          3 | 1993-03-05  |
+|          9 | Daniel      | Davis    | Marketing Coordinator  |          104 |         4 | 80000.00 | 2022-09-10    |          4 | 1990-06-12  |
+|         10 | Olivia      | Martin   | Operations Specialist  |          105 |         5 | 85000.00 | 2022-10-14    |          5 | 1987-12-18  |
+|         11 | Ryan        | Anderson | HR Specialist          |          101 |         1 | 65000.00 | 2022-11-25    |          1 | 1994-06-08  |
+|         12 | Emma        | Wilson   | Software Tester        |          102 |         2 | 68000.00 | 2022-12-05    |          2 | 1986-02-15  |
+|         13 | Christopher | Moore    | Financial Advisor      |          103 |         3 | 72000.00 | 2023-01-10    |          3 | 1991-09-20  |
+|         14 | Ella        | Harris   | Marketing Analyst      |          104 |         4 | 79000.00 | 2023-02-18    |          4 | 1989-04-12  |
+|         15 | Andrew      | Thompson | Operations Coordinator |          105 |         5 | 88000.00 | 2023-03-22    |          5 | 1983-11-30  |
+|         16 | Grace       | Evans    | HR Assistant           |          101 |        11 | 58000.00 | 2023-04-08    |          1 | 1996-03-25  |
+|         17 | Jackson     | Cooper   | Software Developer     |          102 |        12 | 74000.00 | 2023-05-15    |          2 | 1987-07-10  |
+|         18 | Scarlett    | Wright   | Financial Analyst      |          103 |        13 | 76000.00 | 2023-06-20    |          3 | 1992-05-18  |
+|         19 | Henry       | Baker    | Marketing Coordinator  |          104 |        14 | 81000.00 | 2023-07-05    |          4 | 1995-10-22  |
+|         20 | Madison     | Fisher   | Operations Specialist  |          105 |        15 | 92000.00 | 2023-08-12    |          5 | 1984-12-28  |
++------------+-------------+----------+------------------------+--------------+-----------+----------+---------------+------------+-------------+
+
+
+1. Display all the information of the EMP table?
+  select * from employee;
+	
+-> select firstname,salary from employee order by salary desc;
+
+
+2. Display unique Jobs from EMP table?
+  -> select distinct jobtitle from employee;
+
+3. List the emps in the ascending order of their Salaries?
+   -> select firstname,salary from employee order by salary desc;
+
+4. List the details of the emps in ascending order of the Deptnos and descending order of Jobs?
+   -> select * from employee order by Departmentid asc , jobtitle desc;
+
+5. Display all the unique JobTitle  groups in descending order?
+	-> select distinct jobtitle from employee order by jobtitle desc ;  
+
+6. Display all the details of all 'ManagerID'
+	select * from employee where employeeid in (select ManagerID from employee ) ;
+
+7. List the emps who joined before 1981.
+	select * from employee where dateofjoining < '2023-01-01'; // my query
+	select * from employee where dateofjoining < STR_TO_DATE('2023-01-01', '%Y-%m-%d');//gpt
+	select * from employee where dateofjoining < TO_DATE('01-jan-81', 'DD-MON-RR'); //only support in oracle 
+	
+
+8. List the Empno, Ename, Sal, Daily sal of all emps in the ascending order of Annsal.
+select employeeid,concat(firstname,' ',lastname) as name, salary, salary/30 as daily_salary, salary*12 as annunalsalary from employee order by salary*12; //mine
+
+   A) SELECT empno, ename, sal, sal/30, 12*sal AS annsal FROM emp ORDER BY annsal ASC;
+
+9. Display the Empno, Ename, job, Hiredate, Exp of all Mgrs.
+
+SELECT
+    employeeid,
+    firstname,
+    Jobtitle,
+    dateofjoining,
+    TIMESTAMPDIFF(YEAR, dateofjoining, CURDATE()) AS Experience
+FROM
+    employee
+WHERE
+    employeeid IN (SELECT DISTINCT ManagerID FROM employee);             <- //gpt//
+
+
+
+
+   A) SELECT empno, ename, job, hiredate, MONTHS_BETWEEN(SYSDATE, hiredate) AS exp
+      FROM emp WHERE empno IN (SELECT mgr FROM emp);
+
+10. List the Empno, Ename, Sal, Exp of all emps working for Mgr 7369.
+    A) SELECT empno, ename, sal, MONTHS_BETWEEN(SYSDATE, hiredate) AS exp
+       FROM emp WHERE mgr = 7369;
+	
+	select employeeid,firstname,salary,timestampdiff(YEAR,dateofjoining,curdate()) as experince from employee where managerid =2;
