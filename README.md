@@ -4,7 +4,7 @@
 Welcome to my SQL practice repository! This repository contains a collection of SQL queries and projects that I've worked on to strengthen my skills in SQL. 
 The purpose of creating this repository is to have a handy resource for revising SQL concepts, from the basics to advanced topics.
 
-## Table of Contents
+## Table of Contents 
 
 - [Introduction](#introduction)
 - [Content Overview](#content-overview)
